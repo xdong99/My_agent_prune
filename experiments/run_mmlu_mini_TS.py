@@ -18,10 +18,7 @@ import torch
 import pandas as pd
 import numpy as np
 
-from experiments.train_mmlu_mini import train
-from experiments.train_mmlu_eki import train_eki # 最早的测试函数。可能是4步训练，每步用2个随机任务多次训练
-from experiments.train_mmlu_eki import train_eki_final # 新的训练函数。沿用上一步的逻辑，但是可以指定任务。
-from experiments.train_mmlu_eki import train_eki_final2 # 新的训练函数。沿用上一步的逻辑，但是可以指定任务。
+from experiments.train_mmlu import train, train2, train3
 from experiments.train_mmlu_eki import eki_metrics_per_task_one_step
 from experiments.embedding_mmlu import select_mmlu_representatives
 from experiments.metric_cache import MetricCache, eki_metrics_per_task_one_step_cached
@@ -29,9 +26,10 @@ from experiments.metric_cache import MetricCache, eki_metrics_per_task_one_step_
 from sklearn.preprocessing import StandardScaler
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, WhiteKernel
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, WhiteKernel, Matern
 import json
 from pathlib import Path
+
 
 
 def parse_args():
@@ -44,6 +42,10 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=0.1,
                         help="learning rate")
     parser.add_argument('--batch_size', type=int, default=4,
+                        help="batch size")
+    parser.add_argument('--batch_size_train', type=int, default=4,
+                        help="batch size")
+    parser.add_argument('--batch_size_test', type=int, default=4,
                         help="batch size")
     parser.add_argument('--agent_names', nargs='+', type=str, default=['AnalyzeAgent'],
                         help='Specify agent names as a list of strings')
@@ -174,24 +176,49 @@ def fit_pls_gp(X_all, y_obs, obs_pos, n_components=3, seed=0):
 
     X_all_s = x_scaler.transform(X_all)
     Z_all = pls.transform(X_all_s)
+    z_scaler = StandardScaler()
+    Z_all_s = z_scaler.fit_transform(Z_all)
+    Z_obs_s = Z_all_s[obs_pos]
 
-    Z_obs = Z_all[obs_pos]
-    d = Z_obs.shape[1]
+    d = Z_obs_s.shape[1]
 
-    kernel = C(1.0, (1e-3, 1e3)) * RBF(length_scale=np.ones(d), length_scale_bounds=(1e-2, 1e3)) \
-             + WhiteKernel(noise_level=1e-3, noise_level_bounds=(1e-8, 1e0))
+    #kernel = C(1.0, (1e-3, 1e3)) * RBF(length_scale=np.ones(d), length_scale_bounds=(1e-2, 1e3)) \
+    #         + WhiteKernel(noise_level=1e-3, noise_level_bounds=(1e-8, 1e0))
+    #kernel = C(1.0, (1e-3, 1e3)) * Matern(
+    #    length_scale=np.ones(d),
+    #    length_scale_bounds=(1e-2, 1e3),
+    #    nu=2.5
+    #) + WhiteKernel(noise_level=1e-3, noise_level_bounds=(1e-8, 1e0))
+    #
+    #gp = GaussianProcessRegressor(
+    #    kernel=kernel,
+    #    alpha=0.0,
+    #    normalize_y=True,
+    #    n_restarts_optimizer=5,
+    #    random_state=seed,
+    #)
+
+    kernel = C(1.0, (1e-3, 1e3)) * Matern(
+        length_scale=np.ones(d),
+        length_scale_bounds=(1e-2, 1e2),
+        nu=2.5
+    ) + WhiteKernel(
+        noise_level=1e-3,
+        noise_level_bounds=(1e-6, 1e-1)
+    )
 
     gp = GaussianProcessRegressor(
         kernel=kernel,
-        alpha=0.0,
+        alpha=1e-4,
         normalize_y=True,
-        n_restarts_optimizer=5,
+        n_restarts_optimizer=3,
         random_state=seed,
     )
-    gp.fit(Z_obs, y_s)
 
-    mu, std = gp.predict(Z_all, return_std=True)
-    return Z_all, gp, mu, std
+    gp.fit(Z_obs_s, y_s)
+
+    mu, std = gp.predict(Z_all_s, return_std=True)
+    return Z_all_s, gp, mu, std
 
 
 def ts_select_batch(gp, Z_all, candidates_pos, batch_size=5, seed=0):
@@ -212,6 +239,33 @@ def rank_remaining(mu, candidates_pos):
     order = np.argsort(mu[candidates_pos])[::-1]
     return candidates_pos[order]
 
+
+def interleave_ends(lst):
+    res = []
+    i, j = 0, len(lst) - 1
+    while i <= j:
+        if i == j:
+            res.append(lst[i])
+        else:
+            res.append(lst[i])
+            res.append(lst[j])
+        i += 1
+        j -= 1
+    return res
+
+def batch_ts_topk(gp, Z_all, k=10, n_draws=200, seed=0):
+    rng = np.random.default_rng(seed)
+    counts = np.zeros(Z_all.shape[0], dtype=int)
+    for d in range(n_draws):
+        s = gp.sample_y(Z_all, n_samples=1, random_state=int(rng.integers(1e9))).ravel()
+        topk = np.argsort(s)[::-1][:k]
+        counts[topk] += 1
+    # 频率最高的 k 个作为最终 top-k（也可输出概率）
+    order = np.argsort(counts)[::-1]
+    return order[:k], counts / n_draws
+
+def count_common(a, b):
+    return len(set(a) & set(b))
 
 # ======================== main ==========================
 
@@ -260,110 +314,127 @@ async def main():
     # 测试：计算全部的数据
     #df50, metrics50 = await eval_and_cache_metrics(
     #    graph, dataset_train, selected_idx, ensemble_size=6,
-    #    out_dir="outputs/metric_cache",
+    #    out_dir="outputs/metric_cache2",
     #    tag="selected50_es6"
     #)
+    #breakpoint()
 
     # TS部分
     cache = MetricCache.from_npz("outputs/metric_cache/selected50_es6.npz")
     metrics = await eki_metrics_per_task_one_step_cached(cache, graph, dataset_train, selected_idx, ensemble_size=6, keys=["kl"])
 
-
+    #m = cache.query(selected_idx, keys=["kl"])          # 取出这50个的KL（顺序与 selected_idx 对齐）
+    #kl = np.asarray(m["kl"], dtype=np.float64)
+    #
+    #order = np.argsort(kl)[::-1]                        # KL 从大到小
+    #top10_idx = np.asarray(selected_idx)[order[:10]].tolist()
+    #print(top10_idx)
+    #
+    #breakpoint()
 
     # 随机选10个
-    rng = np.random.default_rng(0)
-    init_pos = rng.choice(len(idx_all), size=10, replace=False)
+    rng_1 = np.random.default_rng(0)
+    init_pos = rng_1.choice(len(idx_all), size=10, replace=False)
+    #init_task_indices = idx_all[init_pos].tolist()
+    obs_pos = list(init_pos)
+
+    # 从缓存读初始 y
     init_task_indices = idx_all[init_pos].tolist()
+    m0 = cache.query(init_task_indices, keys=["kl"])
+    y_obs = list(np.asarray(m0["kl"], dtype=np.float64))  # 与 obs_pos 对齐
 
-    #metrics = await eki_metrics_per_task_one_step(graph, dataset_train, init_task_indices, ensemble_size=6)
-    metrics = await eki_metrics_per_task_one_step_cached(cache, graph, dataset_train, init_task_indices, ensemble_size=6, keys=["kl"])
-    y_init = np.asarray(metrics["kl"], dtype=np.float64)  # (10,)
-    X_init = X_all[init_pos]  # (10,384)
-
-    # 进行PLS投影
-    x_scaler = StandardScaler()
-    y_scaler = StandardScaler()
-
-    X_init_s = x_scaler.fit_transform(X_init)                 # (10,384)
-    y_init_t = np.arcsinh(y_init)
-    y_init_s = y_scaler.fit_transform(y_init_t.reshape(-1,1)).ravel()
-
-    n_components = 3  # 先用3，后面可调 2~5
-    pls = PLSRegression(n_components=n_components)
-    pls.fit(X_init_s, y_init_s)
-
-    X_all_s = x_scaler.transform(X_all)   # 注意：用 init 的 scaler
-    Z_all = pls.transform(X_all_s)        # (50, n_components)
-
-    Z_init = Z_all[init_pos]
-
-    # GP
-    d = Z_init.shape[1]
-
-    kernel = C(1.0, (1e-3, 1e3)) * RBF(length_scale=np.ones(d), length_scale_bounds=(1e-2, 1e2)) \
-             + WhiteKernel(noise_level=1e-3, noise_level_bounds=(1e-6, 1e0))
-
-    gp = GaussianProcessRegressor(
-        kernel=kernel,
-        alpha=0.0,            # 有 WhiteKernel 时通常设 0
-        normalize_y=True,     # 再做一次 y normalization（可与 y_scaler 二选一；两者都开也能跑但略重复）
-        n_restarts_optimizer=5,
-        random_state=0
-    )
-
-    gp.fit(Z_init, y_init_s)
-
-    # 再次采样
     observed_mask = np.zeros(len(idx_all), dtype=bool)
-    observed_mask[init_pos] = True
+    observed_mask[obs_pos] = True
 
-    # 从后验采样：返回 shape (n_points, n_samples)
-    samples = gp.sample_y(Z_all, n_samples=1, random_state=0).ravel()  # 有一个种子问题 # 是所有的sample
+    # 你想做几轮，每轮选 5 个
+    num_rounds = 3
+    batch_size = 5
 
-    # 只在未观测的里选最大
-    candidates = np.where(~observed_mask)[0]
-    next_pos = candidates[np.argmax(samples[candidates])]
-    next_idx = int(idx_all[next_pos])
+    for t in range(num_rounds):
+        # 1) 用当前观测拟合 PLS+GP，并得到全体的 mu/std
+        Z_all, gp, mu, std = fit_pls_gp(X_all, y_obs, np.array(obs_pos), n_components=3, seed=t*10+1)
 
-    breakpoint()
+        # 2) candidates = 未观测
+        candidates_pos = np.where(~observed_mask)[0]
+        if len(candidates_pos) == 0:
+            break
 
+        # 3) TS 选本轮要评估的 5 个（在 candidates 内按 samples 取前5）
+        pick_pos, samples = ts_select_batch(gp, Z_all, candidates_pos, batch_size=min(batch_size, len(candidates_pos)), seed=t*20+3)
+        pick_idx = idx_all[pick_pos].tolist()
 
-    metrics = await eki_metrics_per_task_one_step(graph, dataset_train, task_indices, ensemble_size=6)
-    per_task = [
-        {"idx": idx, "kl": kl, "pred_var": pv, "cosine": cs}
-        for idx, kl, pv, cs in zip(task_indices, metrics["kl"], metrics["pred_var"], metrics["cosine"])
-    ]
-    print('information matrix', per_task)
-    p0, c0 = read_tokens()
-    task_prompt = p0 - pn1
-    task_completion = c0 - cn1
-    print("=== Task evaluation tokens ===", task_prompt, task_completion, task_prompt + task_completion)
-    df = pd.DataFrame(per_task)
-    print(df.to_string(index=False))
+        # 4) 从缓存查询这 5 个的真实 KL，当作新观测加入
+        m_new = cache.query(pick_idx, keys=["kl"])
+        y_new = np.asarray(m_new["kl"], dtype=np.float64)
 
-    df_sorted = df.sort_values("kl", ascending=False)
-    k = 10
-    top_idx_list = df_sorted["idx"].head(k).tolist()
-    print("top_idx_list:", top_idx_list)
+        # 更新观测集合
+        for p, yv in zip(pick_pos.tolist(), y_new.tolist()):
+            obs_pos.append(int(p))
+            y_obs.append(float(yv))
+            observed_mask[p] = True
 
-    breakpoint()
+        # 5) 可选：输出本轮“剩余任务”的排序（用 mu）
+        remaining_pos = np.where(~observed_mask)[0]
+        if len(remaining_pos) > 0:
+            ranked_pos = rank_remaining(mu, remaining_pos)
+            ranked_idx = idx_all[ranked_pos].tolist()
+            print(f"[Round {t}] picked idx:", pick_idx)
+            print(f"[Round {t}] top-10 remaining by mean:", ranked_idx[:10])
+        else:
+            print(f"[Round {t}] picked idx:", pick_idx)
+            print(f"[Round {t}] no remaining tasks.")
+
+    Z_all, gp, mu, std = fit_pls_gp(X_all, y_obs, np.array(obs_pos), n_components=3, seed=t*30+5)
+    #mu, std = gp.predict(Z_all, return_std=True)
+    #order = np.argsort(mu)[::-1]
+    #top10_pos = order[:10]
+    #top10_idx = idx_all[top10_pos].tolist()
+    top10_pos, prob = batch_ts_topk(gp, Z_all, k=10, n_draws=200, seed=t*50+15)
+    top10_idx = idx_all[top10_pos].tolist()
 
     # ===== train
     print("Before train: graph")
     print(graph.spatial_logits.detach())
     print(graph.temporal_logits.detach())
 
+    top10_idx_true = [13551, 7816, 4683, 13035, 2763, 2459, 11965, 366, 13348, 9937]
+    top10_idx_resort = interleave_ends(top10_idx)#_true)
+    print("=== Chosen task resort ===", top10_idx_resort)
+    print("=== Chosen task unresorted ===", top10_idx)
+    print("=== True task ===", top10_idx_true)
+    print("same task number", count_common(top10_idx, top10_idx_true))
 
-    task_indices = [160, 473, 27, 629, 808, 460, 10, 16, 1000, 2000]
-    #task_indices = [327, 1846, 2590, 4738, 6912, 8127, 10354, 13789] # random
+    top10_idx_resort = [13035 if x == 13466 else x for x in top10_idx_resort]
+    #top10_idx_resort = [13348 if x == 9937 else x for x in top10_idx_resort]
+    #breakpoint()
+
+    #top10_idx_resort = top10_idx_resort[:5] * 2
+    #top10_idx_resort = top10_idx_resort[-5:] * 2
+
     p0, c0 = read_tokens()
     if args.optimized_spatial or args.optimized_temporal:
-        await train_eki_final2(graph=graph,dataset=dataset_train, task_indices=task_indices,num_iters=5,batch_size=2, imp_per_iters=1,pruning_rate=args.pruning_rate,ensemble_size=8)
-    #    #await train(graph=graph,dataset=dataset_train,num_iters=4,
-    #    #            num_rounds=args.num_rounds,
-    #    #            lr=args.lr,batch_size=args.batch_size,
-    #    #            imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
+        #await train(graph=graph,dataset=dataset_train,num_iters=args.num_iterations,num_rounds=args.num_rounds,
+        #            lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
 
+        #task_indices = [13551, 9450, 7816, 4, 11223, 10269, 1729, 11980, 2459, 4173]
+        
+        #random_list = random.sample(list(idx_all), 10)
+        #print("random_list", random_list)
+        #
+
+        #top10_idx_resort = [13035, 13258, 13348, 9937, 4683, 10269, 11965, 2763, 7816, 11223]
+        top10_idx_resort = [5802, 8167, 8099, 1129, 2947, 7994, 9772, 7082, 7778, 10291]
+
+        await train2(graph=graph,dataset=dataset_train,
+                    #task_indices= random_list,
+                    task_indices= top10_idx_resort,
+                    num_iters=args.num_iterations,num_rounds=args.num_rounds,
+                    lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
+    
+        #await train3(graph=graph,dataset=dataset_train,num_iters=args.num_iterations,num_rounds=args.num_rounds,
+        #            lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
+        #breakpoint()
+    #
     print("After train: graph")
     print(graph.spatial_logits.detach())
     print(graph.temporal_logits.detach())
@@ -374,17 +445,24 @@ async def main():
 
     p2, c2 = read_tokens()
 
-    score = await evaluate(graph=graph,dataset=dataset_val,num_rounds=args.num_rounds,limit_questions=limit_questions,eval_batch_size=args.batch_size)
-    print(f"Score: {score}")
-
+    score = await evaluate(graph=graph,dataset=dataset_val,num_rounds=args.num_rounds,limit_questions=limit_questions,eval_batch_size=args.batch_size_test)
+    
     p3, c3 = read_tokens()
     eval_prompt = p3 - p2
     eval_completion = c3 - c2
-
+    #prompt = PromptTokens.instance().value
+    #completion = CompletionTokens.instance().value
+    #total = prompt + completion
+    #print("Prompt tokens:", int(prompt))
+    #print("Completion tokens:", int(completion))
+    #print("Total tokens:", int(total))
+    
+    print("=== Chosen task resorted ===", top10_idx_resort)
     print("=== Train tokens ===", train_prompt, train_completion, train_prompt + train_completion)
     print("=== Eval tokens  ===", eval_prompt, eval_completion, eval_prompt + eval_completion)
     print("=== Total tokens ===", p3, c3, p3 + c3)
-    #print(f"Score: {score}")
+    print(f"Score: {score}")
+
 
 
 def get_kwargs(mode:Union[Literal['DirectAnswer'],Literal['FullConnected'],Literal['Random'],Literal['Chain'],Literal['Debate'],Literal['Layered'],Literal['Star'],Literal['Mesh'],

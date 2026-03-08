@@ -575,6 +575,8 @@ async def eki_metrics_per_task_one_step(
     kl_list = []
     pred_var_list = []
     cosine_list = []
+    mean_list = []
+    var_list = []
 
     async def _run_one(theta_e: torch.Tensor, record):
         realized_graph = copy.deepcopy(graph)
@@ -589,7 +591,7 @@ async def eki_metrics_per_task_one_step(
         realized_graph.temporal_logits = temporal_e.detach()
 
         ## test ============
-        #print("logits norm:", realized_graph.spatial_logits.norm().item(),
+        ##print("logits norm:", realized_graph.spatial_logits.norm().item(),
         #           realized_graph.temporal_logits.norm().item())
 
 
@@ -614,23 +616,23 @@ async def eki_metrics_per_task_one_step(
 
         predicted = dataset.postprocess_answer(pred_str)
 
-        print("correct_answer raw:", repr(correct_answer), type(correct_answer))
-        #print("final_out type:", type(final_out), "len:", len(final_out) if isinstance(final_out, list) else None)
-        print("model answer", pred_str)
+        #print("correct_answer raw:", repr(correct_answer), type(correct_answer))
+        ##print("final_out type:", type(final_out), "len:", len(final_out) if isinstance(final_out, list) else None)
+        #print("model answer", pred_str)
 
 
         #print('final_out', final_out)
 
         #p_correct = (final_out.get("abcd_probs") or {}).get(correct_answer, 0.0) if isinstance(final_out, dict) else 0.0
         abcd_probs = (final_out0.get("abcd_probs") or {}) if isinstance(final_out0, dict) else {}
-        print('abcd_probs', abcd_probs)
+        #print('abcd_probs', abcd_probs)
         p_correct = float(abcd_probs.get(correct_answer, 0.0))
-        print('p_correct', p_correct)
+        #print('p_correct', p_correct)
 
         # 3) log p_correct 作为 F（避免 log(0)）
         p_correct_t = torch.tensor(p_correct, dtype=torch.float32).clamp_min(1e-20)
         F_val = float(torch.log(p_correct_t).item())
-        print('F_val', F_val)
+        #print('F_val', F_val)
 
         return F_val
 
@@ -654,12 +656,12 @@ async def eki_metrics_per_task_one_step(
 
 
         # test ============
-        print("idx:", idx, "record_id:", id(record), "record_type:", type(record))
+        #print("idx:", idx, "record_id:", id(record), "record_type:", type(record))
         if isinstance(record, dict):
-            print("keys:", record.keys())
+            #print("keys:", record.keys())
             for k in ["question", "prompt", "input", "subject", "id"]:
                 if k in record:
-                    print(k, str(record[k])[:120])
+                    print(k, str(record[k])[:10])
 
 
         # reset ensemble for this task
@@ -677,8 +679,8 @@ async def eki_metrics_per_task_one_step(
         F_vals = torch.tensor(results, dtype=torch.float32)  # (E,)
 
         # test ============
-        print("results:", results)
-        print("F_vals unique:", torch.unique(torch.tensor(results)))
+        #print("results:", results)
+        #print("F_vals unique:", torch.unique(torch.tensor(results)))
 
 
         # predictive variance across ensemble
@@ -711,14 +713,158 @@ async def eki_metrics_per_task_one_step(
             Theta = Theta + damping * (innovation @ K.T)
 
         # test ============
-        print("C_FF:", C_FF.item())
-        print("C_thetaF norm:", C_thetaF.norm().item())
-        print("K norm:", K.norm().item())
-        print("innovation std:", innovation.std().item())
+        #print("C_FF:", C_FF.item())
+        #print("C_thetaF norm:", C_thetaF.norm().item())
+        #print("K norm:", K.norm().item())
+        #print("innovation std:", innovation.std().item())
 
         # new ensemble stats
         mu_new = Theta.mean(dim=0)
         var_new = Theta.var(dim=0, unbiased=True)
+        mean_list.append(mu_new)
+        var_list.append(var_new.sum())
+
+        # KL and cosine
+        kl = _gaussian_kl_diag(mu_old, var_old, mu_new, var_new)
+        kl_list.append(float(kl.item()))
+        #print("KL", kl)
+
+        cosine = Fnn.cosine_similarity(mu_old.unsqueeze(0), mu_new.unsqueeze(0), dim=1)
+        cosine_list.append(float(cosine.item()))
+
+    return {"kl": kl_list, "pred_var": pred_var_list, "cosine": cosine_list,  "var_list": var_list} # "mean_list": mean_list,
+
+
+
+async def eki_metrics_per_task_one_step_give_task(
+    graph,
+    dataset,
+    tasks: List[Any],                 # NEW: list of records (dict/Series/etc.)
+    num_rounds: int = 1,
+    ensemble_size: int = 6,
+    prior_std: float = 2.0,
+    obs_noise: float = 0.1,
+    damping: float = 0.7,
+    max_concurrency: int = 8,
+    clamp_min: float = 1e-20,
+) -> dict:
+    """
+    Like `eki_metrics_per_task_one_step`, but takes explicit task records instead of dataset indices.
+
+    For each record in `tasks`:
+      - start from SAME theta0 and SAME initial ensemble Theta_init
+      - run exactly ONE EKI update step using ONLY that single task (batch_size=1)
+      - compute metrics: KL(old||new), predictive variance of F across ensemble, cosine(mean_old, mean_new)
+
+    Returns:
+      {"kl":[...], "pred_var":[...], "cosine":[...], "var_list":[...]}
+    """
+
+    if tasks is None or len(tasks) == 0:
+        raise ValueError("tasks is empty.")
+
+    sem = asyncio.Semaphore(max_concurrency)
+
+    # fixed initial theta0 and shapes
+    spatial0 = graph.spatial_logits.detach().clone().float()
+    temporal0 = graph.temporal_logits.detach().clone().float()
+    spatial_shape, temporal_shape = spatial0.shape, temporal0.shape
+
+    theta0 = _flatten_logits(spatial0, temporal0)
+    D = theta0.numel()
+    E = ensemble_size
+
+    # IMPORTANT: use the same initial ensemble for every task
+    Theta_init = theta0[None, :].repeat(E, 1) + prior_std * torch.randn(E, D)
+
+    async def _run_one(theta_e: torch.Tensor, record):
+        realized_graph = copy.deepcopy(graph)
+
+        spatial_e, temporal_e = _unflatten_logits(theta_e, spatial_shape, temporal_shape)
+        realized_graph.spatial_logits = spatial_e.detach()
+        realized_graph.temporal_logits = temporal_e.detach()
+
+        input_dict = dataset.record_to_input(record)
+        correct_answer = dataset.record_to_target_answer(record)
+
+        # robust key for abcd_probs
+        key = str(correct_answer).strip()
+        key_u = key.upper()
+        key_l = key.lower()
+
+        async with sem:
+            final_out, _log_probs = await realized_graph.arun(
+                input_dict,
+                num_rounds,
+                return_choice_logprob=True,
+            )
+
+        # normalize final_out to a dict-like object (same logic you used)
+        if isinstance(final_out, list):
+            final_out0 = final_out[0] if len(final_out) > 0 else ""
+        else:
+            final_out0 = final_out
+
+        abcd_probs = (final_out0.get("abcd_probs") or {}) if isinstance(final_out0, dict) else {}
+
+        p_correct = float(
+            abcd_probs.get(key,
+                           abcd_probs.get(key_u,
+                                          abcd_probs.get(key_l, 0.0)))
+        )
+
+        p_correct_t = torch.tensor(p_correct, dtype=torch.float32).clamp_min(clamp_min)
+        F_val = float(torch.log(p_correct_t).item())
+        return F_val
+
+    kl_list = []
+    pred_var_list = []
+    cosine_list = []
+    var_list = []
+
+    for record in tasks:
+        # reset ensemble for this task
+        Theta = Theta_init.detach().clone()
+
+        # evaluate F for this single task: total E runs
+        jobs = [asyncio.create_task(_run_one(Theta[e], record)) for e in range(E)]
+        results = await asyncio.gather(*jobs)
+
+        F_vals = torch.tensor(results, dtype=torch.float32)  # (E,)
+
+        # predictive variance across ensemble
+        pred_var = torch.var(F_vals, unbiased=True)
+        pred_var_list.append(float(pred_var.item()))
+
+        # old ensemble stats
+        mu_old = Theta.mean(dim=0)
+        var_old = Theta.var(dim=0, unbiased=True)
+
+        # one-step EKI update
+        y = torch.tensor(0.0, dtype=torch.float32)
+
+        with torch.no_grad():
+            Theta_mean = Theta.mean(dim=0)
+            F_mean = F_vals.mean()
+
+            Theta_A = Theta - Theta_mean[None, :]
+            F_A = (F_vals - F_mean).reshape(E, 1)
+
+            C_thetaF = (Theta_A.T @ F_A) / (E - 1)
+            C_FF = (F_A.T @ F_A) / (E - 1)
+
+            R = torch.tensor([[obs_noise ** 2]], dtype=torch.float32)
+            inv = torch.linalg.inv(C_FF + R)
+            K = C_thetaF @ inv
+
+            eps = obs_noise * torch.randn(E, 1)
+            innovation = (y + eps) - F_vals.reshape(E, 1)
+            Theta = Theta + damping * (innovation @ K.T)
+
+        # new ensemble stats
+        mu_new = Theta.mean(dim=0)
+        var_new = Theta.var(dim=0, unbiased=True)
+        var_list.append(float(var_new.sum().item()))
 
         # KL and cosine
         kl = _gaussian_kl_diag(mu_old, var_old, mu_new, var_new)
@@ -727,4 +873,4 @@ async def eki_metrics_per_task_one_step(
         cosine = Fnn.cosine_similarity(mu_old.unsqueeze(0), mu_new.unsqueeze(0), dim=1)
         cosine_list.append(float(cosine.item()))
 
-    return {"kl": kl_list, "pred_var": pred_var_list, "cosine": cosine_list}
+    return {"kl": kl_list, "pred_var": pred_var_list, "cosine": cosine_list, "var_list": var_list}

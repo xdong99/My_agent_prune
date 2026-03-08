@@ -18,6 +18,9 @@ from sklearn.metrics import make_scorer, f1_score
 
 from typing import Dict, List
 
+from functools import lru_cache
+from typing import Any, Sequence
+
 def allocate_budget(subjects: List[str], budget: int) -> Dict[str, int]:
     """
     Largest-remainder (Hamilton) allocation:
@@ -173,6 +176,49 @@ def select_mmlu_representatives(
     return selected_original, debug
 
 
+@lru_cache(maxsize=8)
+def _get_encoder(model: str):
+    # 缓存 encoder，避免每次都重新加载
+    return SentenceTransformer(model)
+
+def encode_texts(
+    texts: Sequence[str],
+    model: str = "sentence-transformers/all-MiniLM-L6-v2",
+    batch_size: int = 64,
+    normalize: bool = True,
+) -> np.ndarray:
+    enc = _get_encoder(model)
+    emb = enc.encode(
+        list(texts),
+        batch_size=batch_size,
+        show_progress_bar=False,
+        normalize_embeddings=normalize,
+    )
+    return np.asarray(emb, dtype=np.float32)
+
+def build_text_from_mmlu_item(item: Dict[str, Any]) -> str:
+    # 让新任务的文本拼接风格与 build_text_from_record 尽量一致
+    # 你原来用的是 "(A) ..." 这种格式 :contentReference[oaicite:1]{index=1}
+    q = item["question"]
+    A, B, C, D = item["A"], item["B"], item["C"], item["D"]
+    return (
+        f"Question: {q}\n"
+        f"(A) {A}\n"
+        f"(B) {B}\n"
+        f"(C) {C}\n"
+        f"(D) {D}\n"
+    )
+
+def encode_mmlu_items(
+    items: Sequence[Dict[str, Any]],
+    model: str = "sentence-transformers/all-MiniLM-L6-v2",
+    batch_size: int = 64,
+    normalize: bool = True,
+) -> np.ndarray:
+    texts = [build_text_from_mmlu_item(it) for it in items]
+    return encode_texts(texts, model=model, batch_size=batch_size, normalize=normalize)
+
+    
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--split", type=str, default="test", choices=["dev", "val", "test"])

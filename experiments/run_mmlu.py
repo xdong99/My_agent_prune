@@ -101,8 +101,8 @@ async def main():
     p0, c0 = read_tokens()
     if args.optimized_spatial or args.optimized_temporal:
         # 随机任务训练
-        #await train(graph=graph,dataset=dataset_train,num_iters=args.num_iterations,num_rounds=args.num_rounds,
-        #            lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
+        await train(graph=graph,dataset=dataset_train,num_iters=args.num_iterations,num_rounds=args.num_rounds,
+                    lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
         
         # 检查任务的index
         #await train3(graph=graph,dataset=dataset_train,num_iters=args.num_iterations,num_rounds=args.num_rounds,
@@ -111,7 +111,9 @@ async def main():
         # 指定任务训练
         #task_indices = [160, 473, 27, 629, 808, 460, 10, 16, 1000, 2000] # no attack
         #task_indices = [12, 986 ,160,719,473,32,808,460,629,27] # under attack no ag
-        task_indices = [13551, 9450, 7816, 4, 11223, 10269, 1729, 11980, 2459, 4173]
+
+
+
         #task_indices = [11690, 10268, 13551, 7355, 10101, 4061, 4683, 11810, 8731, 10614, 7816, 8510, 7994, 10157, 12103, 2391, 10324, 9076, 11260, 2171, 10824, 8180
         #                , 12073, 10103, 11980, 6685, 7873, 11223, 11895, 8358, 8226, 8608, 12353, 13025, 889, 2801, 2600, 4646, 12221, 74] # 40个打乱
         
@@ -138,10 +140,13 @@ async def main():
         #                    7816, 8731, 4683, 10101,
         #                    13551, 11690
         #                ]
-        await train2(graph=graph,dataset=dataset_train,
-                    task_indices=task_indices,
-                    num_iters=args.num_iterations,num_rounds=args.num_rounds,
-                    lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
+        
+        # 最后一次在使用的
+        #task_indices = [13551, 9450, 7816, 4, 11223, 10269, 1729, 11980, 2459, 4173]
+        #await train2(graph=graph,dataset=dataset_train,
+        #            task_indices=task_indices,
+        #            num_iters=args.num_iterations,num_rounds=args.num_rounds,
+        #            lr=args.lr,batch_size=args.batch_size_train,imp_per_iters=args.imp_per_iterations,pruning_rate=args.pruning_rate)
     
 
     #

@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import time
 import asyncio
-from typing import List
+from typing import List, Any, Dict
 import copy
 
 from AgentPrune.graph.graph import Graph
@@ -122,6 +122,7 @@ async def train2(
         while True:
             perm = np.random.permutation(len(dataset))   # NOTE: regenerate each cycle
             for idx in perm:
+                print(f"[train2/random_loader] idx={int(idx)}")
                 yield dataset[int(idx)]
 
     loader = index_data_loader(task_indices) if task_indices is not None else random_data_loader()
@@ -207,3 +208,125 @@ async def train3(graph:Graph,
         print(f"Iter {i_iter} batch idxs:", batch_idxs)
         # 不调用 LLM，直接 continue
         continue
+
+
+async def train4(
+    graph: Graph,
+    dataset,
+    *,
+    task_indices: Optional[List[int]] = None,
+    external_records: Optional[List[Any]] = None,   # NEW: out-of-pool tasks (dict/Series/DataFrame/etc.)
+    num_iters: int = 100,
+    num_rounds: int = 1,
+    lr: float = 0.1,
+    batch_size: int = 4,
+    imp_per_iters: int = 1,
+    pruning_rate: float = 0.05,
+) -> None:
+    """
+    Deterministic training loader that can mix:
+      - in-pool tasks via task_indices (dataset[int(idx)])
+      - out-of-pool tasks via external_records (already a record object)
+
+    Differences vs train2:
+      - NO random sampling fallback
+      - external_records supported
+    """
+
+    # --------------------------
+    # validate inputs
+    # --------------------------
+    if (task_indices is None or len(task_indices) == 0) and (external_records is None or len(external_records) == 0):
+        raise ValueError("train4 requires non-empty task_indices and/or external_records.")
+
+    n_data = len(dataset)
+
+    if task_indices is not None:
+        for idx in task_indices:
+            if idx < 0 or idx >= n_data:
+                raise IndexError(f"task_indices contains out-of-range index {idx} (dataset size={n_data}).")
+
+    # --------------------------
+    # deterministic mixed loader (wrap-around)
+    # --------------------------
+    def mixed_loader(
+        task_indices: Optional[List[int]],
+        external_records: Optional[List[Any]],
+    ) -> Iterator[Any]:
+        seq: List[Any] = []
+
+        # 1) external first (so your replacement tasks can be prioritized if you want)
+        if external_records is not None:
+            for r in external_records:
+                seq.append(r)
+
+        # 2) then dataset indices
+        if task_indices is not None:
+            for idx in task_indices:
+                seq.append(dataset[int(idx)])
+
+        if len(seq) == 0:
+            raise ValueError("mixed_loader got empty sequence after building.")
+
+        ptr = 0
+        while True:
+            yield seq[ptr % len(seq)]
+            ptr += 1
+
+    loader = mixed_loader(task_indices, external_records)
+
+    optimizer = torch.optim.Adam([graph.spatial_logits, graph.temporal_logits], lr=lr)
+
+    for i_iter in range(num_iters):
+        print(f"Iter {i_iter}", 80 * "-")
+        start_ts = time.time()
+        correct_answers: List[str] = []
+        answer_log_probs = []
+
+        # batch fetch deterministically
+        for _, record in zip(range(batch_size), loader):
+            realized_graph = copy.deepcopy(graph)
+            realized_graph.spatial_logits = graph.spatial_logits
+            realized_graph.temporal_logits = graph.temporal_logits
+
+            # IMPORTANT: record can be "out-of-pool dict" or dataset record;
+            # dataset.record_to_input/record_to_target_answer must accept it.
+            input_dict = dataset.record_to_input(record)
+            answer_log_probs.append(asyncio.create_task(realized_graph.arun(input_dict, num_rounds)))
+
+            correct_answer = dataset.record_to_target_answer(record)
+            assert isinstance(correct_answer, str), \
+                f"String expected but got {correct_answer} of type {type(correct_answer)}"
+            correct_answers.append(correct_answer)
+
+        raw_results = await asyncio.gather(*answer_log_probs)
+        raw_answers, log_probs = zip(*raw_results)
+
+        loss_list: List[torch.Tensor] = []
+        utilities: List[float] = []
+        answers: List[str] = []
+
+        for raw_answer, log_prob, correct_answer in zip(raw_answers, log_probs, correct_answers):
+            answer = dataset.postprocess_answer(raw_answer)
+            answers.append(answer)
+
+            accuracy = Accuracy()
+            accuracy.update(answer, correct_answer)
+            utility = accuracy.get()
+            utilities.append(utility)
+
+            single_loss = -log_prob * utility
+            loss_list.append(single_loss)
+
+        total_loss = torch.mean(torch.stack(loss_list))
+        optimizer.zero_grad()
+        total_loss.backward()
+        optimizer.step()
+
+        print("raw_answers:", raw_answers)
+        print("answers:", answers)
+        print(f"Batch time {time.time() - start_ts:.3f}")
+        print("utilities:", utilities)
+
+        if (i_iter + 1) % imp_per_iters == 0:
+            graph.update_masks(pruning_rate)

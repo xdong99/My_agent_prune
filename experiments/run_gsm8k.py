@@ -35,12 +35,17 @@ def dataloader(data_list, batch_size, i_batch):
 def load_config(config_path):
     with open(config_path, 'r',encoding='utf-8') as file:
         return yaml.safe_load(file)
+
+def read_tokens():
+    p = int(PromptTokens.instance().value)
+    c = int(CompletionTokens.instance().value)
+    return p, c
     
 def parse_args():
     parser = argparse.ArgumentParser(description="AgentPrune Experiments on gsm8k")
     parser.add_argument("--dataset_json", type=str, default="dataset/gsm8k/gsm8k.jsonl")
     parser.add_argument("--result_file", type=str, default=None)
-    parser.add_argument("--llm_name", type=str, default="gpt-4-1106-preview")
+    parser.add_argument("--llm_name", type=str, default="gpt-4.1-nano")
     parser.add_argument('--mode', type=str, default='FullConnected',
                         choices=['DirectAnswer', 'FullConnected', 'Random', 'Chain','Debate','Layered','Star'],
                         help="Mode of operation. Default is 'FullConnected'.")
@@ -69,8 +74,17 @@ def parse_args():
 async def main():
     args = parse_args()
     result_file = None
+
+
     dataset = JSONLReader.parse_file(args.dataset_json)
     dataset = gsm_data_process(dataset)
+
+    rng = random.Random(0)   # 局部 seed，不影响全局 random 状态
+    rng.shuffle(dataset)
+    
+    train_pool = dataset[:1000]
+    test_set   = dataset[1000:]
+
     current_time = Time.instance().value or time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     Time.instance().value = current_time
     result_dir = Path(f"{AgentPrune_ROOT}/result/gsm8k")
@@ -92,6 +106,7 @@ async def main():
     num_batches = int(len(dataset)/args.batch_size)
     total_solved, total_executed = (0, 0)
     
+    p0, c0 = read_tokens()
     for i_batch in range(num_batches):
         print(f"Batch {i_batch}",80*'-')
         start_ts = time.time()
@@ -162,6 +177,10 @@ async def main():
             args.optimized_spatial = False
             args.optimized_temporal = False
 
+    p1, c1 = read_tokens()
+    total_prompt = p1 - p0
+    total_completion = c1 - c0
+    print("=== Train tokens ===", total_prompt, total_completion, total_prompt + total_completion)
 
 def get_kwargs(mode:Union[Literal['DirectAnswer'],Literal['FullConnected'],Literal['Random'],Literal['Chain'],Literal['Debate'],Literal['Layered'],Literal['Star']]
                ,N:int):

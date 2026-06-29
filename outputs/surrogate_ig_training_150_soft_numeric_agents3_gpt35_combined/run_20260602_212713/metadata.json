@@ -1,0 +1,123 @@
+{
+  "created_at": "20260602_212713",
+  "combined_from": [
+    "outputs\\surrogate_ig_training_checkpoint20_soft_numeric_agents3_gpt35\\run_20260602_201816",
+    "outputs\\surrogate_ig_training_additional130_soft_numeric_agents3_gpt35\\run_20260602_203439"
+  ],
+  "renderer": "llm",
+  "generator_model": "gpt-4.1-mini",
+  "generator_conditioning": "canonical",
+  "llm_name": "gpt-3.5-turbo",
+  "num_agents": 3,
+  "num_rounds": 1,
+  "ensemble_size": 6,
+  "ig_observation": "soft_numeric",
+  "spec_sampling": "informative",
+  "initial_specs": 150,
+  "initial_stats": {
+    "count": 150,
+    "nonzero_count": 129,
+    "nonzero_fraction": 0.86,
+    "mean_ig": 2.426549269358317,
+    "max_ig": 26.228912353515625,
+    "median_ig": 1.2990789413452148
+  },
+  "token_counts": {
+    "initial_generation_tokens": 106535.0,
+    "initial_ig_tokens": 3997283.0,
+    "total_tokens": 4103818.0
+  },
+  "source_summaries": [
+    {
+      "run_dir": "outputs\\surrogate_ig_training_checkpoint20_soft_numeric_agents3_gpt35\\run_20260602_201816",
+      "count": 20,
+      "nonzero_count": 16,
+      "nonzero_fraction": 0.8,
+      "mean_ig": 1.3529767513275146,
+      "max_ig": 5.949151992797852,
+      "metadata": {
+        "created_at": "20260602_201816",
+        "metadata_path": null,
+        "graph_source": "fresh",
+        "llm_name": "gpt-3.5-turbo",
+        "seed": 101,
+        "renderer": "llm",
+        "generator_model": "gpt-4.1-mini",
+        "generator_conditioning": "canonical",
+        "generator_timeout": 45.0,
+        "generator_validation_model": "gpt-4.1-mini",
+        "generator_validation": false,
+        "allow_generator_answer_correction": false,
+        "spec_sampling": "informative",
+        "random_spec_sampling": "informative",
+        "trust_region_hamming": null,
+        "ig_observation": "soft_numeric",
+        "initial_only": true,
+        "initial_specs": 20,
+        "ensemble_size": 6,
+        "ig_repeats": 1,
+        "aggregate_mode": "last connected",
+        "num_rounds": 1,
+        "num_agents": 3,
+        "initial_stats": {
+          "mean_ig": 1.3529767513275146,
+          "max_ig": 5.949151992797852,
+          "nonzero_fraction": 0.8,
+          "nonzero_count": 16,
+          "count": 20
+        },
+        "token_counts": {
+          "initial_generation_tokens": 14125.0,
+          "initial_ig_tokens": 532198.0,
+          "total_tokens": 546323.0
+        }
+      }
+    },
+    {
+      "run_dir": "outputs\\surrogate_ig_training_additional130_soft_numeric_agents3_gpt35\\run_20260602_203439",
+      "count": 130,
+      "nonzero_count": 113,
+      "nonzero_fraction": 0.8692307692307693,
+      "mean_ig": 2.5917142721322866,
+      "max_ig": 26.228912353515625,
+      "metadata": {
+        "created_at": "20260602_203439",
+        "metadata_path": null,
+        "graph_source": "fresh",
+        "llm_name": "gpt-3.5-turbo",
+        "seed": 202,
+        "renderer": "llm",
+        "generator_model": "gpt-4.1-mini",
+        "generator_conditioning": "canonical",
+        "generator_timeout": 45.0,
+        "generator_validation_model": "gpt-4.1-mini",
+        "generator_validation": false,
+        "allow_generator_answer_correction": false,
+        "spec_sampling": "informative",
+        "random_spec_sampling": "informative",
+        "trust_region_hamming": null,
+        "ig_observation": "soft_numeric",
+        "initial_only": true,
+        "initial_specs": 130,
+        "initial_batch_size": 20,
+        "ensemble_size": 6,
+        "ig_repeats": 1,
+        "aggregate_mode": "last connected",
+        "num_rounds": 1,
+        "num_agents": 3,
+        "initial_stats": {
+          "mean_ig": 2.5917142721322866,
+          "max_ig": 26.228912353515625,
+          "nonzero_fraction": 0.8692307692307693,
+          "nonzero_count": 113,
+          "count": 130
+        },
+        "token_counts": {
+          "initial_generation_tokens": 92410.0,
+          "initial_ig_tokens": 3465085.0,
+          "total_tokens": 3557495.0
+        }
+      }
+    }
+  ]
+}

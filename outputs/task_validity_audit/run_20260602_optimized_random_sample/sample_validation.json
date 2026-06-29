@@ -1,0 +1,218 @@
+[
+  {
+    "group": "optimized",
+    "id": 10,
+    "real_ig": 29.600738525390625,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "one_digit"
+    },
+    "task": "Two garden sprinklers start spraying water simultaneously at noon. The first sprinkler sprays every 4 days, and the second sprinkler sprays every 6 days. There is also a bird that visits the garden every 5 days, but this does not affect the sprinklers. Including the start day and counting up to day 24, how many times will both sprinklers spray together?",
+    "answer": "3",
+    "valid": true,
+    "corrected_answer": "3",
+    "reason": "The problem is unambiguous and matches the lcm_meeting task family. The distractor about the bird visiting every 5 days is irrelevant but does not affect the calculation. The first sprinkler sprays every 4 days and the second every 6 days, so they spray together every LCM(4,6) = 12 days. Counting from day 0 (noon) to day 24 inclusive, they spray together on days 0, 12, and 24, totaling 3 times. The proposed answer is correct."
+  },
+  {
+    "group": "optimized",
+    "id": 12,
+    "real_ig": 28.653297424316406,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two street lamps start flashing their lights simultaneously at exactly noon. The first lamp flashes every 8 days, and the second lamp flashes every 6 days. A nearby bakery opens daily at 7 AM but does not affect the flashing schedule. Counting the days from day 0 through day 120 inclusive, how many times will both lamps flash together?",
+    "answer": "6",
+    "valid": false,
+    "corrected_answer": "8",
+    "reason": "The problem is unambiguous and matches the lcm_meeting task family with a harmless distractor (the bakery opening time). The lamps flash together every LCM of 8 and 6 days, which is 24 days. Counting from day 0 to day 120 inclusive, the flashes together occur at days 0, 24, 48, 72, 96, and 120, totaling 6 times. However, the proposed answer is 6, which matches the correct count. Therefore, the proposed answer is correct. But the problem states 'Counting the days from day 0 through day 120 inclusive,' so the total count is 6, which matches the proposed answer. Hence, the problem is valid and the answer is correct."
+  },
+  {
+    "group": "optimized",
+    "id": 17,
+    "real_ig": 27.897232055664062,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two traffic signals at a large intersection start blinking simultaneously at noon. The first signal blinks every 8 days, and the second signal blinks every 10 days. Additionally, a nearby fountain sprays water for 15 minutes every hour, but this detail does not affect the blinking pattern. Counting all the times from day 0 through day 120 inclusive, how many times will both signals blink together?",
+    "answer": "4",
+    "valid": true,
+    "corrected_answer": "4",
+    "reason": "The problem is unambiguous and matches the task_family lcm_meeting with an irrelevant distractor. However, the proposed answer 4 is incorrect. The least common multiple of 8 and 10 is 40, so the signals blink together every 40 days starting at day 0. Counting from day 0 through day 120 inclusive, the signals blink together at days 0, 40, 80, and 120, which is 4 times. The proposed answer matches the correct count, so the answer is correct. Therefore, the problem is valid with the proposed answer 4."
+  },
+  {
+    "group": "optimized",
+    "id": 2,
+    "real_ig": 17.56358528137207,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two assembly lines produce small gadgets. Line X produces 8 gadgets every hour for 4 hours, while Line Y produces 12 gadgets every hour for 5 hours. After all gadgets are made, 25% of the total number of gadgets made by Line X are found defective and discarded. How many non-defective gadgets remain in total after discarding the faulty ones from Line X?",
+    "answer": "69",
+    "valid": true,
+    "corrected_answer": "69",
+    "reason": "The problem is unambiguous and matches the defective_rate task family by combining production from two lines and discarding a percentage of defective gadgets from Line X. The distractor (25% defective from Line X) is harmless and does not cause ambiguity. The proposed answer 69 is correct: Line X produces 8*4=32 gadgets, 25% defective means 0.25*32=8 defective discarded, leaving 24 non-defective. Line Y produces 12*5=60 gadgets, all non-defective. Total non-defective = 24 + 60 = 84. However, the proposed answer is 69, which is incorrect. Therefore, the corrected answer is 84."
+  },
+  {
+    "group": "optimized",
+    "id": 7,
+    "real_ig": 4.814927101135254,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two signal beacons start flashing simultaneously at exactly noon today. The first beacon flashes every 4 hours, and the second beacon flashes every 10 hours. Including the initial flash at noon and counting all flashes up to and including the flash at hour 24, how many times will both beacons flash together?",
+    "answer": "2",
+    "valid": true,
+    "corrected_answer": "3",
+    "reason": "The problem is a valid lcm_meeting task: two beacons flashing periodically, asking for the count of simultaneous flashes including the initial one. The distractor is the temptation to count flashes based on individual intervals rather than their least common multiple. The least common multiple of 4 and 10 is 20 hours. The beacons flash together at hour 0 (noon), hour 20, and no other times up to hour 24. Thus, they flash together 2 times within 24 hours, but including the initial flash at hour 0 and counting all flashes up to hour 24 means counting flashes at 0 and 20 hours only, which is 2 times. However, the proposed answer is 2, but the problem states 'including the initial flash at noon and counting all flashes up to and including the flash at hour 24.' Since 24 is not a multiple of 20, the flashes together occur only at 0 and 20 hours, so total 2 times. Therefore, the proposed answer 2 is correct. The problem matches the task family, is unambiguous, and the distractor is harmless."
+  },
+  {
+    "group": "optimized",
+    "id": 9,
+    "real_ig": 13.898124694824219,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Factory X produces 18 components every hour and runs for 4 hours, while Factory Y produces 20 components every hour and operates for 5 hours. After all components are made, 25% of the total number of components produced by Factory X are discarded due to defects. How many non-defective components remain in total from both factories?",
+    "answer": "129",
+    "valid": true,
+    "corrected_answer": "129",
+    "reason": "The problem is unambiguous and matches the defective_rate task family by combining production from two factories and discarding a percentage of defective components from Factory X. Factory X produces 18 components/hour * 4 hours = 72 components; 25% are defective, so 75% remain: 72 * 0.75 = 54 non-defective. Factory Y produces 20 components/hour * 5 hours = 100 components, all non-defective. Total non-defective = 54 + 100 = 154. However, the proposed answer is 129, which is incorrect. The distractor tempts using the total production of Factory X (72) without adjusting for the 25% discard, but the problem is clear. Therefore, the correct answer is 154, not 129."
+  },
+  {
+    "group": "random",
+    "id": 13,
+    "real_ig": 19.49026870727539,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "none",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two automated water fountains start spraying at the same time at noon. The first fountain sprays every 4 days, and the second fountain sprays every 10 days. Including the start time at noon, how many times will both fountains spray simultaneously from day 0 through day 120?",
+    "answer": "7",
+    "valid": true,
+    "corrected_answer": "7",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the 'lcm_meeting' task family. The fountains spray every 4 and 10 days respectively, so they spray simultaneously every LCM(4,10) = 20 days. From day 0 through day 120 inclusive, the simultaneous spray days are 0, 20, 40, 60, 80, 100, and 120, totaling 7 times. The problem is unambiguous, no distractors are present, and the proposed answer matches the correct calculation."
+  },
+  {
+    "group": "random",
+    "id": 8,
+    "real_ig": 4.094930648803711,
+    "spec": {
+      "task_family": "overlap_count",
+      "reasoning_depth": "3",
+      "distractor_type": "none",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "In a community center, 43 people attend yoga classes, 52 people attend painting classes, and 8 people participate in both activities. Additionally, there are 22 people who do not attend either class. How many people are there in total at the community center?",
+    "answer": "109",
+    "valid": true,
+    "corrected_answer": "109",
+    "reason": "The problem is a clear set-overlap counting problem matching the overlap_count task family. The total number of people is calculated using the inclusion-exclusion principle: total = yoga + painting - both + neither = 43 + 52 - 8 + 22 = 109. The proposed answer is correct, and there are no ambiguities or contradictions."
+  },
+  {
+    "group": "random",
+    "id": 2,
+    "real_ig": 3.189131736755371,
+    "spec": {
+      "task_family": "percent_base",
+      "reasoning_depth": "2",
+      "distractor_type": "none",
+      "numeric_scale": "medium",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Emma purchased a secondhand bicycle for $160 and spent an additional $20 on maintenance. After the maintenance, the bicycle's resale value increased to 125% more than the original purchase price. If Emma sold the bicycle for this new value, what was her total profit after deducting both the initial cost and the maintenance expenses?",
+    "answer": "180",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The problem is ambiguous because the phrase '125% more than the original purchase price' can be interpreted in two ways: either as 125% of the original price (which would be $200) or as 125% increase over the original price (which would be $160 + 125% of $160 = $360). This ambiguity affects the resale value calculation and thus the profit. Therefore, the problem is not unambiguous."
+  },
+  {
+    "group": "random",
+    "id": 14,
+    "real_ig": 1.5364665985107422,
+    "spec": {
+      "task_family": "coupon_tax",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Emma wants to buy a computer priced at $360. She first uses a 25% off coupon on the original price. After the discount, a 20% sales tax is added to the reduced price. Finally, Emma applies a $60 store credit to the total after tax. How much money does Emma pay out of pocket after all these adjustments?",
+    "answer": "264",
+    "valid": true,
+    "corrected_answer": "264",
+    "reason": "The problem is unambiguous and matches the coupon_tax task family. The order of operations is important: first apply the 25% coupon discount to $360, resulting in $270; then add 20% sales tax to $270, resulting in $324; finally, subtract the $60 store credit, resulting in $264. The proposed answer matches the correct calculation. The distractor (store credit applied after tax) is natural and does not cause ambiguity or change the correct answer."
+  },
+  {
+    "group": "random",
+    "id": 6,
+    "real_ig": 2.4974279403686523,
+    "spec": {
+      "task_family": "capacity_ceiling",
+      "reasoning_depth": "2",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "A library needs to catalog 530 new books. Each day, the staff spends 10 minutes organizing their workspace before cataloging. They can catalog 4 books each minute and have a maximum of 95 minutes available per day, including setup. The library also received a shipment of 120 magazines, but these do not require cataloging. What is the minimum number of days needed to catalog all the new books?",
+    "answer": "2",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The proposed answer is incorrect. The staff has 95 minutes per day, with 10 minutes spent organizing, leaving 85 minutes for cataloging. At 4 books per minute, they can catalog 340 books per day. To catalog 530 books, they need 2 days for 680 books, which is sufficient. So the minimum number of days is 2, matching the proposed answer. However, the problem includes a distractor (120 magazines) that is irrelevant but does not affect the answer, which is acceptable. The problem matches the task_family and is unambiguous. Therefore, the proposed answer is correct, but the reasoning above confirms it. The problem is valid."
+  },
+  {
+    "group": "random",
+    "id": 0,
+    "real_ig": 2.9207916259765625,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "2",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Liam had a collection of rare coins. He gave away one half of his coins, then bought 25 more coins at a coin fair. After these transactions, Liam counted 115 coins in total. How many coins did Liam have initially?",
+    "answer": "180",
+    "valid": true,
+    "corrected_answer": "180",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family, where the original amount is inferred after losing a fraction (giving away half) and gaining a fixed number (25 coins). The proposed answer 180 is correct: Let x be the initial number of coins. After giving away half, Liam has x/2 coins left. Then he buys 25 more, so total coins = x/2 + 25 = 115. Solving for x: x/2 = 90, so x = 180. The distractor (the 25 coins bought) tempts a counting mistake but does not cause ambiguity or change the correct answer."
+  }
+]

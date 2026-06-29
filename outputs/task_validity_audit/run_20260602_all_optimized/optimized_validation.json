@@ -1,0 +1,342 @@
+[
+  {
+    "pair_id": 0,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two signaling buoys flash their lights starting at midnight. The first buoy flashes every 4 days, and the second buoy flashes every 6 days. There is a lighthouse nearby that operates only during the day, but it does not affect the buoys' flashing schedule. Counting all the days from day 0 through day 120 inclusive, how many times will both buoys flash their lights simultaneously?",
+    "answer": "11",
+    "valid": true,
+    "corrected_answer": "11",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the 'lcm_meeting' task family. The irrelevant detail about the lighthouse does not affect the calculation. The first buoy flashes every 4 days, the second every 6 days, so they flash together every LCM(4,6) = 12 days. Counting from day 0 to day 120 inclusive, the number of simultaneous flashes is (120 / 12) + 1 = 10 + 1 = 11. The proposed answer is correct, the problem is unambiguous, and the distractor is harmless."
+  },
+  {
+    "pair_id": 1,
+    "real_ig": 2.204533576965332,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Two street lamps start flashing at the same moment at noon. One lamp flashes every 4 days, and the other flashes every 6 days. A nearby bakery bakes 20 loaves of bread daily, but this does not affect the lamps. Including the initial flash at noon, how many times do the two lamps flash together within 120 days?",
+    "answer": "11",
+    "valid": true,
+    "corrected_answer": "11",
+    "reason": "The problem is a least-common-multiple meeting problem where two lamps flash every 4 and 6 days respectively. The least common multiple of 4 and 6 is 12, so the lamps flash together every 12 days starting at day 0 (noon). Within 120 days, the number of times they flash together including the initial flash is (120 / 12) + 1 = 10 + 1 = 11. The bakery detail is an irrelevant but harmless distractor. The problem is unambiguous, matches the task family, and the proposed answer is correct."
+  },
+  {
+    "pair_id": 2,
+    "real_ig": 17.56358528137207,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two assembly lines produce small gadgets. Line X produces 8 gadgets every hour for 4 hours, while Line Y produces 12 gadgets every hour for 5 hours. After all gadgets are made, 25% of the total number of gadgets made by Line X are found defective and discarded. How many non-defective gadgets remain in total after discarding the faulty ones from Line X?",
+    "answer": "69",
+    "valid": true,
+    "corrected_answer": "69",
+    "reason": "The problem is unambiguous and matches the task_family defective_rate. The distractor (25% defective from Line X only) is harmless and does not cause ambiguity. However, the proposed answer 69 is incorrect. Correct calculation: Line X produces 8*4=32 gadgets; 25% defective means 0.25*32=8 defective, so 32-8=24 non-defective from Line X. Line Y produces 12*5=60 gadgets, none defective. Total non-defective = 24+60=84. Therefore, the correct answer is 84, not 69."
+  },
+  {
+    "pair_id": 3,
+    "real_ig": 3.615049362182617,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two bells ring simultaneously at noon today. The first bell rings every 4 days, and the second bell rings every 6 days. There are 12 chairs set up in the room where the bells ring. Counting from day 0 through day 24 inclusive, how many times will both bells ring together?",
+    "answer": "3",
+    "valid": true,
+    "corrected_answer": "3",
+    "reason": "The problem is a least-common-multiple meeting problem as required. The bells ring together every LCM(4,6) = 12 days. From day 0 through day 24 inclusive, they ring together at days 0, 12, and 24, totaling 3 times. The 12 chairs detail is irrelevant but does not affect the answer or cause ambiguity. The problem is unambiguous and the proposed answer is correct."
+  },
+  {
+    "pair_id": 4,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two street lamps start flashing simultaneously at midnight. The first lamp flashes every 4 days, and the second lamp flashes every 10 days. A decorative banner was put up on the street, but it does not affect the lamps' flashing schedules. Counting the days from day 0 through day 120 inclusive, how many times will both lamps flash together?",
+    "answer": "7",
+    "valid": true,
+    "corrected_answer": "7",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the task_family 'lcm_meeting'. The irrelevant detail about the decorative banner does not affect the calculation, so the distractor is harmless. The problem is unambiguous and does not trivially reveal the answer. The first lamp flashes every 4 days, the second every 10 days, so they flash together every LCM(4,10) = 20 days. Counting from day 0 to day 120 inclusive, the days they flash together are 0, 20, 40, 60, 80, 100, and 120, totaling 7 times. The proposed answer matches the correct answer."
+  },
+  {
+    "pair_id": 5,
+    "real_ig": 3.464750289916992,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two digital billboards start displaying a special advertisement at the same time at noon. One billboard repeats the ad every 4 days, and the other repeats it every 10 days. Including the initial display at noon (day 0) and counting through day 120, how many times will both billboards show the advertisement simultaneously? Note that the 120 days refer to the total period from the start, not the number of repeats for each billboard.",
+    "answer": "7",
+    "valid": true,
+    "corrected_answer": "7",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the 'lcm_meeting' task family. The two billboards repeat every 4 and 10 days, so their simultaneous displays occur every LCM(4,10) = 20 days. Counting from day 0 through day 120 inclusive, the simultaneous displays occur at days 0, 20, 40, 60, 80, 100, and 120, totaling 7 times. The distractor about the 120 days being the total period (not number of repeats) is harmless and does not cause ambiguity. The problem is unambiguous, the proposed answer matches the correct answer, and no required quantity is trivially revealed."
+  },
+  {
+    "pair_id": 6,
+    "real_ig": 0.5576038360595703,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two garden sprinklers start spraying water simultaneously at 12:00 PM today. One sprinkler sprays every 4 days, and the other sprays every 10 days. Additionally, a bird visits the garden every 3 days, but this does not affect the sprinklers. Counting all the times the sprinklers spray together from day 0 through day 24 inclusive, how many times will both sprinklers spray at the same time?",
+    "answer": "2",
+    "valid": false,
+    "corrected_answer": "3",
+    "reason": "The problem is unambiguous and matches the lcm_meeting task family with a harmless distractor (bird visits). The sprinklers spray together at multiples of the LCM of 4 and 10, which is 20 days. Counting from day 0 through day 24 inclusive, they spray together at day 0 and day 20, totaling 2 times. However, the proposed answer is 2, which matches this count. But the problem states 'Counting all the times the sprinklers spray together from day 0 through day 24 inclusive,' which includes day 0, day 20, and also day 40 is outside the range. So the total is 2 times, matching the proposed answer. Therefore, the proposed answer is correct. The problem is valid."
+  },
+  {
+    "pair_id": 7,
+    "real_ig": 4.814927101135254,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two signal beacons start flashing simultaneously at exactly noon today. The first beacon flashes every 4 hours, and the second beacon flashes every 10 hours. Including the initial flash at noon and counting all flashes up to and including the flash at hour 24, how many times will both beacons flash together?",
+    "answer": "2",
+    "valid": true,
+    "corrected_answer": "3",
+    "reason": "The problem is a valid lcm_meeting task: two beacons flashing periodically, asking for the count of simultaneous flashes including the initial one. The least common multiple of 4 and 10 is 20 hours, so the beacons flash together at 0, 20 hours within the 24-hour period. Counting both initial (0) and 20-hour flashes gives 2 times. However, the problem states 'including the initial flash at noon and counting all flashes up to and including the flash at hour 24.' The flashes occur at 0 and 20 hours, but 24 is not a multiple of 20, so no additional simultaneous flash at 24. Therefore, the total simultaneous flashes are 2. The proposed answer is 2, which matches this calculation. The distractor is the 24-hour mark, tempting one to count a flash at 24 hours, which does not occur simultaneously. The problem is unambiguous and matches the task family. Thus, the proposed answer is correct."
+  },
+  {
+    "pair_id": 8,
+    "real_ig": 3.2026567459106445,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "one_digit"
+    },
+    "task": "Two garden sprinklers start watering simultaneously at noon. The first sprinkler sprays water every 4 days, and the second sprinkler sprays every 6 days. If the garden is 15 square meters, how many times will both sprinklers spray together from day 0 through day 120 inclusive? Note that the garden size does not affect the timing of the sprinkler sprays.",
+    "answer": "11",
+    "valid": true,
+    "corrected_answer": "11",
+    "reason": "The problem is a valid least-common-multiple meeting problem (task_family: lcm_meeting). The garden size is an irrelevant but harmless distractor that does not affect the timing. The first sprinkler sprays every 4 days, the second every 6 days, so they spray together every LCM(4,6) = 12 days. From day 0 through day 120 inclusive, the number of times they spray together is (120 / 12) + 1 = 10 + 1 = 11. The proposed answer matches the correct answer. The problem is unambiguous and does not reveal the answer trivially."
+  },
+  {
+    "pair_id": 9,
+    "real_ig": 13.898124694824219,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Factory X produces 18 components every hour and runs for 4 hours, while Factory Y produces 20 components every hour and operates for 5 hours. After all components are made, 25% of the total number of components produced by Factory X are discarded due to defects. How many non-defective components remain in total from both factories?",
+    "answer": "129",
+    "valid": true,
+    "corrected_answer": "129",
+    "reason": "The problem is unambiguous and matches the defective_rate task family by combining production from two factories and discarding a percentage of defective components from Factory X. The distractor is the total production of Factory X before discarding, which tempts using the wrong base quantity for the defect rate calculation, but it does not cause ambiguity or change the correct answer. The proposed answer is correct: Factory X produces 18*4=72 components, 25% discarded means 75% remain, so 72*0.75=54 non-defective components. Factory Y produces 20*5=100 components with no defects discarded. Total non-defective components = 54 + 100 = 154. However, the proposed answer is 129, which is incorrect. Rechecking calculations: 18*4=72, 25% discarded means 72*0.75=54, 20*5=100, total 54+100=154. The proposed answer 129 is incorrect. Therefore, valid must be false and corrected_answer 154."
+  },
+  {
+    "pair_id": 10,
+    "real_ig": 29.600738525390625,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "one_digit"
+    },
+    "task": "Two garden sprinklers start spraying water simultaneously at noon. The first sprinkler sprays every 4 days, and the second sprinkler sprays every 6 days. There is also a bird that visits the garden every 5 days, but this does not affect the sprinklers. Including the start day and counting up to day 24, how many times will both sprinklers spray together?",
+    "answer": "3",
+    "valid": true,
+    "corrected_answer": "3",
+    "reason": "The problem is unambiguous and matches the lcm_meeting task family. The distractor about the bird visiting every 5 days is irrelevant and does not affect the calculation. The first sprinkler sprays every 4 days and the second every 6 days, so they spray together every LCM(4,6) = 12 days. Counting from day 0 (noon) to day 24 inclusive, they spray together on days 0, 12, and 24, totaling 3 times. The proposed answer is correct."
+  },
+  {
+    "pair_id": 11,
+    "real_ig": 15.018657684326172,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Two digital billboards start their light shows simultaneously at midnight. The first billboard repeats its light pattern every 8 days, while the second repeats every 6 days. Additionally, the city installed a new sound system that plays an unrelated jingle every 5 days, but this does not affect the light patterns. Counting all the times from day 0 through day 120 inclusive, how many times will both billboards flash their light shows together?",
+    "answer": "6",
+    "valid": true,
+    "corrected_answer": "6",
+    "reason": "The problem is unambiguous and matches the task_family lcm_meeting with a harmless distractor. However, the proposed answer 6 is incorrect. The two billboards flash together every LCM of 8 and 6 days, which is 24 days. Counting from day 0 through day 120 inclusive, the flashes occur at days 0, 24, 48, 72, 96, and 120, totaling 6 times. The proposed answer is actually correct, so the problem is valid. Therefore, valid should be true and corrected_answer should be 6."
+  },
+  {
+    "pair_id": 12,
+    "real_ig": 28.653297424316406,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two street lamps start flashing their lights simultaneously at exactly noon. The first lamp flashes every 8 days, and the second lamp flashes every 6 days. A nearby bakery opens daily at 7 AM but does not affect the flashing schedule. Counting the days from day 0 through day 120 inclusive, how many times will both lamps flash together?",
+    "answer": "6",
+    "valid": false,
+    "corrected_answer": "8",
+    "reason": "The problem is unambiguous and matches the lcm_meeting task family with a harmless distractor (the bakery opening time). The lamps flash together every LCM of 8 and 6 days, which is 24 days. Counting from day 0 to day 120 inclusive, the simultaneous flashes occur at days 0, 24, 48, 72, 96, and 120, totaling 6 times. However, the proposed answer is 6, which matches the correct count, so the proposed answer is correct. Therefore, the problem is valid and the proposed answer is correct."
+  },
+  {
+    "pair_id": 13,
+    "real_ig": 0.7862510681152344,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two assembly lines produce widgets. Line X produces 8 widgets each hour for 4 hours, and Line Y produces 12 widgets each hour for 5 hours. After production, 25% of the total widgets are discarded due to defects. How many usable widgets are left?",
+    "answer": "69",
+    "valid": false,
+    "corrected_answer": "75",
+    "reason": "The problem is unambiguous and matches the task_family. The total widgets produced are (8*4) + (12*5) = 32 + 60 = 92. After discarding 25%, usable widgets = 75% of 92 = 0.75 * 92 = 69. The proposed answer is 69, which is correct. However, the problem includes a distractor that tempts an off-by-one error, but it is harmless. The problem is valid except the proposed answer is correct, so valid should be true. Therefore, the corrected_answer should be 69 and valid true."
+  },
+  {
+    "pair_id": 14,
+    "real_ig": 12.82126235961914,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "one_digit"
+    },
+    "task": "Two signal beacons start flashing simultaneously at midnight today. One beacon flashes every 4 days, and the other flashes every 6 days. Including the initial flash at day 0, how many times will both beacons flash together from day 0 through day 120?",
+    "answer": "11",
+    "valid": true,
+    "corrected_answer": "11",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the 'lcm_meeting' task family. The beacons flash every 4 and 6 days, so their simultaneous flashes occur every LCM(4,6) = 12 days. From day 0 through day 120 inclusive, the number of simultaneous flashes is (120 / 12) + 1 = 10 + 1 = 11, including the initial flash at day 0. The distractor (flashing every 4 or 6 days) tempts using the wrong base quantity but does not cause ambiguity or change the correct answer. The problem is unambiguous, and the proposed answer is correct."
+  },
+  {
+    "pair_id": 15,
+    "real_ig": 8.346210479736328,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two signal towers light up simultaneously at noon today. The first tower lights up every 4 days, and the second tower lights up every 6 days. Including the initial lighting at day 0, how many times will both towers light up together from day 0 through day 120?",
+    "answer": "11",
+    "valid": true,
+    "corrected_answer": "11",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the task_family 'lcm_meeting'. The first tower lights every 4 days, the second every 6 days, so they light together every LCM(4,6) = 12 days. From day 0 through day 120 inclusive, the number of times they light together is (120 / 12) + 1 = 10 + 1 = 11 times, including day 0. The distractor is the temptation to count multiples of 4 or 6 alone, but the problem is unambiguous and the proposed answer is correct."
+  },
+  {
+    "pair_id": 16,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Two signal towers start transmitting a light pulse simultaneously at noon today. The first tower sends a pulse every 4 days, while the second tower sends a pulse every 6 days. Counting all the days from day 0 through day 120 inclusive, how many times will both towers send their pulses on the same day?",
+    "answer": "11",
+    "valid": true,
+    "corrected_answer": "11",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the task_family 'lcm_meeting'. The first tower pulses every 4 days, the second every 6 days. The least common multiple of 4 and 6 is 12, so both towers pulse together every 12 days starting at day 0. Counting from day 0 through day 120 inclusive, the number of such days is (120 / 12) + 1 = 10 + 1 = 11. The distractor (different pulse intervals) does not cause ambiguity or change the correct answer. The problem is unambiguous and does not trivially reveal the answer."
+  },
+  {
+    "pair_id": 17,
+    "real_ig": 27.897232055664062,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two traffic signals at a large intersection start blinking simultaneously at noon. The first signal blinks every 8 days, and the second signal blinks every 10 days. Additionally, a nearby fountain sprays water for 15 minutes every hour, but this detail does not affect the blinking pattern. Counting all the times from day 0 through day 120 inclusive, how many times will both signals blink together?",
+    "answer": "4",
+    "valid": true,
+    "corrected_answer": "4",
+    "reason": "The problem is unambiguous and matches the task_family and distractor requirements. However, the proposed answer is incorrect. The least common multiple (LCM) of 8 and 10 is 40, so the signals blink together every 40 days starting at day 0. Counting from day 0 through day 120 inclusive, the signals blink together at days 0, 40, 80, and 120, totaling 4 times. The proposed answer is 4, which is correct. Therefore, the problem is valid and the answer is correct."
+  },
+  {
+    "pair_id": 18,
+    "real_ig": 13.385726928710938,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "small",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two signal towers start flashing their lights simultaneously at noon. One tower flashes every 6 days, while the other flashes every 6 days. A large blue banner is hung near the towers, but it does not affect the flashing schedule. Counting all the times the towers flash together from the starting day through day 24 inclusive, how many times will their lights flash simultaneously?",
+    "answer": "5",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The problem states both towers flash every 6 days, so their flashing schedules are identical. The least common multiple (LCM) of 6 and 6 is 6, meaning they flash together every 6 days starting at day 0 (noon). Counting from day 0 through day 24 inclusive, the simultaneous flashes occur at days 0, 6, 12, 18, and 24, totaling 5 times, which matches the proposed answer. However, the problem is trivial because both towers have the same flashing interval, making the LCM calculation unnecessary and the problem not a meaningful LCM meeting problem. Also, the distractor (the blue banner) is harmless but irrelevant. Despite the correct answer, the problem does not properly fit the task_family 'lcm_meeting' as it lacks a meaningful LCM calculation between different intervals. Therefore, the problem is invalid."
+  },
+  {
+    "pair_id": 19,
+    "real_ig": 0.4180736541748047,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two factories manufacture widgets. Factory X produces 8 widgets each hour for 4 hours, and Factory Y produces 12 widgets each hour for 5 hours. After all widgets are made, 25% of them are discarded due to defects. How many widgets are left that are not discarded?",
+    "answer": "69",
+    "valid": true,
+    "corrected_answer": "69",
+    "reason": "The problem is unambiguous and matches the task_family defective_rate. The proposed answer 69 is correct: Factory X produces 8*4=32 widgets, Factory Y produces 12*5=60 widgets, total 92 widgets. After discarding 25%, remaining widgets are 75% of 92, which is 0.75*92=69. However, the problem includes a distractor (25% discarded) that tempts using the wrong denominator, but this distractor is harmless. The problem is valid except that the proposed answer is correct, so valid should be true. Therefore, the only issue is that valid is false here. The correct response is valid true with corrected_answer 69."
+  }
+]

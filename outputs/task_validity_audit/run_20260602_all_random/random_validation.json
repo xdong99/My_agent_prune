@@ -1,0 +1,342 @@
+[
+  {
+    "id": 0,
+    "real_ig": 2.9207916259765625,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "2",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Liam had a collection of rare coins. He gave away one half of his coins, then bought 25 more coins at a coin fair. After these transactions, Liam counted 115 coins in total. How many coins did Liam have initially?",
+    "answer": "180",
+    "valid": true,
+    "corrected_answer": "180",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family, as it requires inferring the original number of coins after losing half and gaining 25. The proposed answer 180 is correct: Let x be the initial number of coins. After giving away half, Liam has x/2 coins left. Then he buys 25 more, so total is x/2 + 25 = 115. Solving: x/2 = 90, so x = 180. The distractor (the 25 coins bought) is harmless and does not cause ambiguity or change the correct answer."
+  },
+  {
+    "id": 1,
+    "real_ig": 0.27281665802001953,
+    "spec": {
+      "task_family": "coupon_tax",
+      "reasoning_depth": "2",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "medium",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Liam wants to buy a coat priced at $200. He first uses a 25% off coupon on the coat\u2019s price. Then, a 10% sales tax is added to the discounted price. Afterwards, Liam redeems a $20 gift card toward the total. By the way, Liam\u2019s favorite color is blue, but this doesn\u2019t affect the price. How many dollars does Liam still have to pay after all discounts and tax?",
+    "answer": "145",
+    "valid": false,
+    "corrected_answer": "158",
+    "reason": "The problem is unambiguous and matches the task_family. The distractor (Liam's favorite color) is irrelevant and harmless. The proposed answer is incorrect. Correct calculation: 25% off $200 is $150; 10% tax on $150 is $15, total $165; subtract $20 gift card, final amount $145. However, the proposed answer is 145, which matches this calculation, so the proposed answer is correct. Rechecking: 200 - 25% = 150; 150 + 10% tax = 165; 165 - 20 = 145. The proposed answer is correct. Therefore, valid should be true and corrected_answer should be empty."
+  },
+  {
+    "id": 2,
+    "real_ig": 3.189131736755371,
+    "spec": {
+      "task_family": "percent_base",
+      "reasoning_depth": "2",
+      "distractor_type": "none",
+      "numeric_scale": "medium",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Emma purchased a secondhand bicycle for $160 and spent an additional $20 on maintenance. After the maintenance, the bicycle's resale value increased to 125% more than the original purchase price. If Emma sold the bicycle for this new value, what was her total profit after deducting both the initial cost and the maintenance expenses?",
+    "answer": "180",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The problem is ambiguous because it is unclear whether the 125% increase in resale value is based on the original purchase price alone or includes the maintenance cost. The phrase '125% more than the original purchase price' suggests the resale value is 125% more than $160, i.e., 160 + 1.25*160 = 360. However, the total cost to Emma is 160 + 20 = 180, so the profit would be 360 - 180 = 180. The proposed answer matches this calculation. However, the problem does not explicitly clarify whether the maintenance cost is included in the base for the percent increase or not, which can cause confusion. Also, the problem matches the task_family and other specifications, but the ambiguity in interpreting the base quantity makes it invalid."
+  },
+  {
+    "id": 3,
+    "real_ig": 0.3092193603515625,
+    "spec": {
+      "task_family": "overlap_count",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "At a large conference, 48 attendees participated in the keynote workshop, 57 attended the breakout sessions, and 13 attended both events. Additionally, 10 attendees did not participate in either of these events. How many attendees were there in total at the conference?",
+    "answer": "102",
+    "valid": true,
+    "corrected_answer": "102",
+    "reason": "The problem is a classic set-overlap counting problem matching the overlap_count task family. The numbers given are unambiguous: 48 attended the keynote workshop, 57 attended breakout sessions, 13 attended both, and 10 attended neither. The total number of attendees is calculated as (48 + 57 - 13) + 10 = 92 + 10 = 102, which matches the proposed answer. The distractor (10 attendees who did not participate in either event) tempts one to ignore them or miscount, but it is harmless and does not cause ambiguity. The problem is not trivial as the total is not directly stated and requires inclusion-exclusion reasoning with a distractor. Therefore, the problem is valid and the proposed answer is correct."
+  },
+  {
+    "id": 4,
+    "real_ig": 0.3289480209350586,
+    "spec": {
+      "task_family": "overlap_count",
+      "reasoning_depth": "2",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "In a city library, 48 patrons borrow fiction books, 53 patrons borrow non-fiction books, and 13 patrons borrow both fiction and non-fiction books. Additionally, there are 22 patrons who do not borrow any books. How many patrons are there in total at the library?",
+    "answer": "110",
+    "valid": true,
+    "corrected_answer": "110",
+    "reason": "The problem is a classic set-overlap counting problem matching the overlap_count task family. The total number of patrons who borrow books is calculated using inclusion-exclusion: 48 (fiction) + 53 (non-fiction) - 13 (both) = 88 patrons who borrow at least one type of book. Adding the 22 patrons who do not borrow any books gives a total of 110 patrons. The proposed answer is correct. The distractor (the 22 patrons who do not borrow any books) is harmless and does not cause ambiguity or change the correct answer."
+  },
+  {
+    "id": 5,
+    "real_ig": 0.6831588745117188,
+    "spec": {
+      "task_family": "overlap_count",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "At a large conference, 43 attendees are enrolled in the photography workshop, 52 are attending the painting seminar, and 8 participants are signed up for both events. Additionally, 22 attendees are not participating in either workshop. How many attendees are at the conference in total?",
+    "answer": "109",
+    "valid": true,
+    "corrected_answer": "109",
+    "reason": "The problem is a classic set-overlap counting problem matching the overlap_count task family. It requires three-step reasoning: summing attendees in each workshop, subtracting the overlap to avoid double counting, then adding those not attending either. The distractor detail (22 not participating in either) might tempt incorrect denominator use but does not cause ambiguity or change the correct answer. The proposed answer 109 is correct: total = 43 + 52 - 8 + 22 = 109. The problem is unambiguous, not trivial, and fits the structured specification."
+  },
+  {
+    "id": 6,
+    "real_ig": 2.4974279403686523,
+    "spec": {
+      "task_family": "capacity_ceiling",
+      "reasoning_depth": "2",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "A library needs to catalog 530 new books. Each day, the staff spends 10 minutes organizing their workspace before cataloging. They can catalog 4 books each minute and have a maximum of 95 minutes available per day, including setup. The library also received a shipment of 120 magazines, but these do not require cataloging. What is the minimum number of days needed to catalog all the new books?",
+    "answer": "2",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The proposed answer is incorrect. The staff has 95 minutes per day, with 10 minutes spent on setup, leaving 85 minutes for cataloging. At 4 books per minute, they can catalog 340 books per day. To catalog 530 books, they need 2 days for 680 books, which is sufficient. So the minimum number of days is 2, matching the proposed answer. However, the problem includes a distractor (120 magazines) that does not affect the answer, which is acceptable. The problem matches the task_family and is unambiguous. Therefore, the proposed answer is correct, and the problem is valid."
+  },
+  {
+    "id": 7,
+    "real_ig": 2.719633102416992,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "medium",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Lisa took 7 practice tests and had an average score of 70 on them. She then took an eighth test, and her average score increased to 75. What score did she get on the eighth test?",
+    "answer": "110",
+    "valid": false,
+    "corrected_answer": "105",
+    "reason": "The problem is unambiguous and matches the task_family average_inverse. The proposed answer 110 is incorrect. The correct score on the eighth test is calculated as follows: total score after 7 tests = 7 * 70 = 490; total score after 8 tests = 8 * 75 = 600; score on eighth test = 600 - 490 = 110. However, this calculation shows 110, which matches the proposed answer, so the proposed answer is correct. Rechecking: 7*70=490, 8*75=600, 600-490=110. The proposed answer is correct. Therefore, valid should be true. The distractor (average increasing by 5 points) is a natural detail that tempts an endpoint mistake but does not cause ambiguity. The problem does not reveal the required quantity directly. Hence, the problem is valid with the proposed answer 110."
+  },
+  {
+    "id": 8,
+    "real_ig": 4.094930648803711,
+    "spec": {
+      "task_family": "overlap_count",
+      "reasoning_depth": "3",
+      "distractor_type": "none",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "In a community center, 43 people attend yoga classes, 52 people attend painting classes, and 8 people participate in both activities. Additionally, there are 22 people who do not attend either class. How many people are there in total at the community center?",
+    "answer": "109",
+    "valid": true,
+    "corrected_answer": "109",
+    "reason": "The problem is a clear set-overlap counting problem matching the overlap_count task family. The total number of people is calculated using the inclusion-exclusion principle: total = yoga + painting - both + neither = 43 + 52 - 8 + 22 = 109. The proposed answer matches the correct answer. There are no distractors, and the problem is unambiguous and not trivial."
+  },
+  {
+    "id": 9,
+    "real_ig": 0.507415771484375,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "1",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "A student took 3 exams and had an average score of 80. After taking a fourth exam, the student's average increased to 85. The student mentioned that the fourth exam was held in a different building than the first three. What was the score on the fourth exam?",
+    "answer": "100",
+    "valid": true,
+    "corrected_answer": "110",
+    "reason": "The problem is unambiguous and matches the 'average_inverse' task family, where the missing value (fourth exam score) is found from old and new averages. The distractor (the exam location) is irrelevant and does not affect the calculation. The proposed answer is incorrect. Calculating: total after 3 exams = 3 * 80 = 240; total after 4 exams = 4 * 85 = 340; fourth exam score = 340 - 240 = 100. The proposed answer is 100, which matches the calculation, so the proposed answer is correct. Therefore, corrected_answer should be 100 and valid true."
+  },
+  {
+    "id": 10,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "2",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Liam started with a certain number of baseball cards. He gave away one-third of his cards, then purchased an additional 25 cards. After these changes, he had a total of 145 baseball cards. How many baseball cards did Liam have originally?",
+    "answer": "180",
+    "valid": true,
+    "corrected_answer": "180",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family. The original number of cards is found by letting x be the original amount, then after giving away one-third, Liam has (2/3)x cards left. After purchasing 25 more cards, he has (2/3)x + 25 = 145 cards. Solving for x: (2/3)x = 120, so x = 180. The proposed answer is correct. The distractor (one-third given away) tempts using the wrong denominator but does not cause ambiguity or contradiction."
+  },
+  {
+    "id": 11,
+    "real_ig": 2.6529598236083984,
+    "spec": {
+      "task_family": "overlap_count",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "medium",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "At a community center, 23 children attend the art club, 32 children participate in the music club, and 8 children are members of both clubs. Additionally, there are 22 children who do not join either club. How many children are registered at the community center in total?",
+    "answer": "69",
+    "valid": true,
+    "corrected_answer": "69",
+    "reason": "The problem is a classic set-overlap counting problem matching the overlap_count task family. The numbers given are unambiguous and sufficient to find the total number of children. Using inclusion-exclusion: total in clubs = 23 + 32 - 8 = 47; adding 22 children not in any club gives 47 + 22 = 69 total children. The proposed answer 69 is correct. The distractor (children not in any club) is harmless and does not cause ambiguity or change the correct answer."
+  },
+  {
+    "id": 12,
+    "real_ig": 1.7545719146728516,
+    "spec": {
+      "task_family": "growth_difference",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "In the first quarter, Company X processed 220 shipments and then increased its shipments by 75% in the second quarter. Meanwhile, Company Y started with 200 shipments and increased its shipments by 60% in the same period. How many more shipments did the company with the higher total have after the increase?",
+    "answer": "65",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The problem asks for the difference in total shipments after the increase, but it is ambiguous whether 'after the increase' means only the second quarter shipments or the combined shipments of the first and second quarters. This ambiguity makes the problem unclear and invalid as a training task."
+  },
+  {
+    "id": 13,
+    "real_ig": 19.49026870727539,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "none",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two automated water fountains start spraying at the same time at noon. The first fountain sprays every 4 days, and the second fountain sprays every 10 days. Including the start time at noon, how many times will both fountains spray simultaneously from day 0 through day 120?",
+    "answer": "7",
+    "valid": true,
+    "corrected_answer": "7",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the 'lcm_meeting' task family. The fountains spray every 4 and 10 days respectively, so they spray together every LCM(4,10) = 20 days. From day 0 through day 120 inclusive, the simultaneous sprays occur at days 0, 20, 40, 60, 80, 100, and 120, totaling 7 times. The problem is unambiguous, no distractors are present, and the proposed answer is correct."
+  },
+  {
+    "id": 14,
+    "real_ig": 1.5364665985107422,
+    "spec": {
+      "task_family": "coupon_tax",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Emma wants to buy a computer priced at $360. She first uses a 25% off coupon on the original price. After the discount, a 20% sales tax is added to the reduced price. Finally, Emma applies a $60 store credit to the total after tax. How much money does Emma pay out of pocket after all these adjustments?",
+    "answer": "264",
+    "valid": true,
+    "corrected_answer": "264",
+    "reason": "The problem is unambiguous and matches the coupon_tax task family. The order of operations is important: first apply the 25% coupon discount to $360, resulting in $270; then add 20% sales tax to $270, resulting in $324; finally, subtract the $60 store credit, resulting in $264. The proposed answer matches the correct calculation. The distractor (store credit applied after tax) is harmless and does not cause ambiguity."
+  },
+  {
+    "id": 15,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "small",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Maya had some marbles. She lost one-half of her marbles during recess and later found 25 more marbles on the playground. After that, she had 37 marbles. How many marbles did Maya have before recess?",
+    "answer": "24",
+    "valid": true,
+    "corrected_answer": "24",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family, but the proposed answer 24 is incorrect. Let x be the original number of marbles. After losing half, Maya has x/2 marbles. She then finds 25 more, so total is x/2 + 25 = 37. Solving: x/2 = 12, so x = 24. However, this matches the proposed answer, so the answer is correct. The problem is valid and the distractor (losing half) is harmless. Therefore, the problem is valid and the proposed answer is correct."
+  },
+  {
+    "id": 16,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "medium",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "A class took 7 math tests and the average score was 70. After the class took one more test, the average score rose to 78. What was the score on that additional test?",
+    "answer": "134",
+    "valid": true,
+    "corrected_answer": "134",
+    "reason": "The problem is unambiguous and matches the average_inverse task family. The missing value (score on the additional test) is correctly calculated using the old and new averages. The distractor (average increasing after one more test) is natural but does not cause ambiguity or change the correct answer. The proposed answer 134 is correct."
+  },
+  {
+    "id": 17,
+    "real_ig": 0.4927949905395508,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "2",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "A factory produced 5 batches of widgets last month with an average of 80 widgets per batch. This month, they made one additional batch, and the average output per batch rose to 85. What was the number of widgets produced in the new batch?",
+    "answer": "110",
+    "valid": true,
+    "corrected_answer": "110",
+    "reason": "The problem is unambiguous and matches the average_inverse task family. The proposed answer is correct: the total widgets last month were 5 * 80 = 400, and the new average after 6 batches is 85, so total widgets now are 6 * 85 = 510. The new batch produced 510 - 400 = 110 widgets. The distractor (tempting to use the old denominator 5 instead of 6) is harmless and does not cause ambiguity."
+  },
+  {
+    "id": 18,
+    "real_ig": 2.530162811279297,
+    "spec": {
+      "task_family": "percent_base",
+      "reasoning_depth": "2",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "medium",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Lena purchased an old bicycle for $160 and spent $40 fixing it up. After the repairs, the bicycle's value increased by 75% compared to the original purchase price. She then sold the bicycle for this new value. How much profit did Lena make after subtracting both the purchase price and the repair costs? Be careful to use the original purchase price as the base for the percentage increase, not the total cost after repairs.",
+    "answer": "80",
+    "valid": true,
+    "corrected_answer": "80",
+    "reason": "The problem is unambiguous and matches the percent_base task family, requiring the use of the original purchase price as the base for the 75% increase. The distractor (repair costs) tempts using the wrong base but does not cause ambiguity. The correct calculation is: increased value = 160 + 0.75 * 160 = 280; profit = 280 - (160 + 40) = 80, which matches the proposed answer."
+  },
+  {
+    "id": 19,
+    "real_ig": 0.30002689361572266,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "2",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Lena started with a certain number of baseball cards. She gave away one quarter of her collection and then purchased 25 more cards. After these changes, she had 160 cards. Interestingly, her friend also lent her 10 cards, but she returned them immediately, so they did not affect her total count. How many baseball cards did Lena have initially?",
+    "answer": "180",
+    "valid": true,
+    "corrected_answer": "180",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family. The distractor about the friend lending and returning 10 cards is irrelevant and does not affect the calculation. Let x be the initial number of cards. After giving away one quarter, Lena has (3/4)x cards. Then she buys 25 more, so total is (3/4)x + 25 = 160. Solving: (3/4)x = 135, x = 180. The proposed answer 180 is correct."
+  }
+]

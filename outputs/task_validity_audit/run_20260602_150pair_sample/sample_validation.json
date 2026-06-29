@@ -1,0 +1,206 @@
+[
+  {
+    "id": 142,
+    "real_ig": 26.228912353515625,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two digital clocks start simultaneously at midnight. The first clock chimes every 8 days, and the second clock chimes every 10 days. Including the initial chime at day 0 and counting through day 120, how many times will both clocks chime together?",
+    "answer": "4",
+    "valid": false,
+    "corrected_answer": "",
+    "reason": "The problem is unambiguous and matches the task family, but the proposed answer is incorrect. The least common multiple of 8 and 10 is 40, so the clocks chime together at days 0, 40, 80, and 120, totaling 4 times. However, the problem includes the initial chime at day 0 and counts through day 120, so the total number of times they chime together is 4, which matches the proposed answer. Therefore, the proposed answer is correct. The distractor (including the initial chime) is harmless. The problem is valid."
+  },
+  {
+    "id": 110,
+    "real_ig": 21.054515838623047,
+    "spec": {
+      "task_family": "percent_base",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "A company purchased a secondhand printer for $280 and then invested $40 in maintenance to improve it. After the maintenance, the printer's market value increased by 125% compared to its original purchase price. The company sold the printer at this new value. How much profit did the company make after subtracting both the purchase price and maintenance costs?",
+    "answer": "310",
+    "valid": true,
+    "corrected_answer": "310",
+    "reason": "The problem is unambiguous and matches the percent_base task family, requiring interpretation of the base quantity (original purchase price) for the percent increase. The distractor is the maintenance cost, which tempts an endpoint mistake but does not cause ambiguity. The correct calculation is: original price = 280, maintenance = 40, increased value = 280 + 125% of 280 = 280 + 350 = 630. Profit = 630 - (280 + 40) = 630 - 320 = 310, which matches the proposed answer."
+  },
+  {
+    "id": 85,
+    "real_ig": 17.027870178222656,
+    "spec": {
+      "task_family": "defective_rate",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "easy",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Factory X produces 18 widgets every hour for 4 hours, while Factory Y produces 20 widgets every hour for 5 hours. After all widgets are made, 25% of the total widgets produced by Factory X are discarded due to defects. How many good widgets remain in total from both factories?",
+    "answer": "129",
+    "valid": true,
+    "corrected_answer": "129",
+    "reason": "The problem is unambiguous and matches the defective_rate task family by combining production from two factories and applying a discard rate to one. Factory X produces 18 widgets/hour * 4 hours = 72 widgets, with 25% discarded, leaving 75% * 72 = 54 good widgets. Factory Y produces 20 widgets/hour * 5 hours = 100 widgets, all good. Total good widgets = 54 + 100 = 154. However, the proposed answer is 129, which is incorrect. Rechecking calculations: 25% of 72 is 18 discarded, so 54 remain from Factory X; Factory Y produces 100 good widgets; total good widgets = 54 + 100 = 154. The proposed answer 129 is incorrect. The distractor is the 25% discard applied only to Factory X, tempting one to discard from total or Factory Y. The problem is valid but the answer is wrong."
+  },
+  {
+    "id": 53,
+    "real_ig": 15.964860916137695,
+    "spec": {
+      "task_family": "lcm_meeting",
+      "reasoning_depth": "3",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Two signal towers start sending a synchronization pulse simultaneously at noon. The first tower sends a pulse every 8 days, and the second tower sends a pulse every 10 days. A nearby weather station records temperature every day but does not affect the pulses. Counting all the days from day 0 through day 120 inclusive, how many times will both towers send a pulse on the same day?",
+    "answer": "4",
+    "valid": true,
+    "corrected_answer": "4",
+    "reason": "The problem is a classic least-common-multiple meeting problem, matching the 'lcm_meeting' task family. The distractor (weather station recording temperature) is irrelevant and does not affect the calculation. The pulses coincide every LCM of 8 and 10 days, which is 40 days. Counting from day 0 to day 120 inclusive, the pulses coincide on days 0, 40, 80, and 120, totaling 4 times. The proposed answer is correct, and the problem is unambiguous and not trivially revealing the answer."
+  },
+  {
+    "id": 64,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "small",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "A baker tracked the average number of cookies sold per day over a week and found it was 60 cookies. On the eighth day, the baker sold enough cookies to raise the average daily sales to 68 cookies over the eight days. What was the number of cookies sold on the eighth day? Note that the average before the eighth day is based on 7 days, not 8.",
+    "answer": "124",
+    "valid": true,
+    "corrected_answer": "124",
+    "reason": "The problem is unambiguous and matches the average_inverse task family, where the missing value (cookies sold on the eighth day) is recovered from old and new averages. The initial average is over 7 days (60 cookies), and the new average over 8 days is 68 cookies. Calculating: total after 7 days = 7 * 60 = 420; total after 8 days = 8 * 68 = 544; cookies sold on the eighth day = 544 - 420 = 124, which matches the proposed answer. The distractor (mentioning the average over a week) is harmless and does not cause ambiguity or change the correct answer."
+  },
+  {
+    "id": 99,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "1",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Lena collected a large set of rare coins. She decided to donate one-fourth of her collection to a museum. After the donation, she counted and found she still had 135 coins left. How many coins did Lena have originally?",
+    "answer": "180",
+    "valid": true,
+    "corrected_answer": "180",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family, where the original amount is inferred after losing a fraction. Lena donates one-fourth of her collection, so she retains three-fourths. Given she has 135 coins left, the original number is 135 / (3/4) = 180. The proposed answer is correct. The distractor (one-fourth donation) is natural and does not cause ambiguity or change the correct answer."
+  },
+  {
+    "id": 105,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "2",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "medium",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "A chef prepared 5 batches of cookies, each batch averaging 70 cookies. After baking one additional batch, the overall average rose to 78 cookies per batch. The chef also used a new oven for the last batch, which was set to 350 degrees Fahrenheit. How many cookies were in the last batch?",
+    "answer": "118",
+    "valid": true,
+    "corrected_answer": "118",
+    "reason": "The problem is unambiguous and matches the average_inverse task family, where the missing value (the last batch size) is found from old and new averages. The distractor (oven temperature) is irrelevant but does not affect the answer. The proposed answer 118 is correct: total cookies after 5 batches = 5 * 70 = 350; total cookies after 6 batches = 6 * 78 = 468; last batch cookies = 468 - 350 = 118."
+  },
+  {
+    "id": 14,
+    "real_ig": 0.0,
+    "spec": {
+      "task_family": "reverse_fraction",
+      "reasoning_depth": "1",
+      "distractor_type": "wrong_denominator",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Lena started with a collection of rare coins. She gave away one-third of her coins and was left with 120 coins. How many coins did Lena have originally?",
+    "answer": "180",
+    "valid": true,
+    "corrected_answer": "180",
+    "reason": "The problem is unambiguous and matches the reverse_fraction task family. Lena gave away one-third of her coins and was left with 120 coins, which represents two-thirds of the original amount. Calculating the original amount: 120 \u00f7 (2/3) = 180. The proposed answer is correct. The distractor (one-third given away) is natural and does not cause ambiguity."
+  },
+  {
+    "id": 146,
+    "real_ig": 0.9372730255126953,
+    "spec": {
+      "task_family": "capacity_ceiling",
+      "reasoning_depth": "2",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "large",
+      "difficulty_band": "medium",
+      "answer_magnitude": "one_digit"
+    },
+    "task": "A library needs to catalog 520 new books. Each day, the librarian spends 10 minutes organizing the workspace before cataloging. After setup, the librarian catalogs 4 books per minute and can work for a total of 40 minutes each day, including setup. What is the minimum number of days required to catalog all the books? Note that the 40 minutes includes the setup time.",
+    "answer": "5",
+    "valid": true,
+    "corrected_answer": "5",
+    "reason": "The problem is unambiguous and matches the capacity_ceiling task family. The librarian spends 10 minutes each day setting up, leaving 30 minutes for cataloging books. At 4 books per minute, the librarian catalogs 120 books per day. To catalog 520 books, the minimum number of days is ceil(520 / 120) = 5. The proposed answer is correct. The distractor (setup time) tempts using the full 40 minutes for cataloging but does not cause ambiguity or change the correct answer."
+  },
+  {
+    "id": 101,
+    "real_ig": 2.1766138076782227,
+    "spec": {
+      "task_family": "coupon_tax",
+      "reasoning_depth": "3",
+      "distractor_type": "wrong_base",
+      "numeric_scale": "small",
+      "difficulty_band": "hard",
+      "answer_magnitude": "three_digit"
+    },
+    "task": "Liam wants to buy a pair of shoes priced at $80. He first applies a 25% off coupon to the original price. After the discount, a 20% sales tax is added based on the discounted price. Finally, Liam redeems a $60 gift card toward the total amount due. How much money does Liam still need to pay?",
+    "answer": "12",
+    "valid": true,
+    "corrected_answer": "12",
+    "reason": "The problem is unambiguous and matches the coupon_tax task family. The order of operations is clear: apply 25% discount to $80, then add 20% tax on the discounted price, then subtract the $60 gift card. Calculation: discounted price = 80 * 0.75 = 60; tax = 60 * 0.20 = 12; total after tax = 60 + 12 = 72; amount due after gift card = 72 - 60 = 12. The proposed answer 12 is correct. The distractor (gift card applied last) is harmless and does not cause ambiguity."
+  },
+  {
+    "id": 4,
+    "real_ig": 1.8069381713867188,
+    "spec": {
+      "task_family": "average_inverse",
+      "reasoning_depth": "3",
+      "distractor_type": "off_by_one",
+      "numeric_scale": "large",
+      "difficulty_band": "hard",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "A factory produced 7 batches of widgets, each batch having an average weight of 80 grams. After producing one more batch, the overall average weight increased to 88 grams. What was the average weight of the newly produced batch? Note that the factory counts only completed batches when calculating averages.",
+    "answer": "144",
+    "valid": true,
+    "corrected_answer": "144",
+    "reason": "The problem is unambiguous and matches the average_inverse task family, where the missing batch average is recovered from old and new averages. The proposed answer 144 is correct: total weight of first 7 batches = 7 * 80 = 560; total weight after 8 batches = 8 * 88 = 704; weight of new batch = 704 - 560 = 144; average weight of new batch = 144. The distractor (mentioning counting only completed batches) is harmless and does not affect the calculation."
+  },
+  {
+    "id": 147,
+    "real_ig": 5.198724746704102,
+    "spec": {
+      "task_family": "percent_base",
+      "reasoning_depth": "2",
+      "distractor_type": "irrelevant_extra",
+      "numeric_scale": "medium",
+      "difficulty_band": "medium",
+      "answer_magnitude": "two_digit"
+    },
+    "task": "Emma purchased a secondhand bicycle for $160 and paid an additional $20 to have it serviced. After servicing, the bicycle's value increased by 75% compared to the original purchase price. Emma then sold the bicycle at this new value. She also bought a helmet for $15, but this did not affect the bicycle's sale profit. How much profit did Emma make from selling the bicycle after accounting for the purchase and servicing costs?",
+    "answer": "100",
+    "valid": true,
+    "corrected_answer": "100",
+    "reason": "The problem is unambiguous and matches the percent_base task family. The key base quantity is the original purchase price of $160. The bicycle's value increased by 75% of $160, which is 160 * 0.75 = 120, so the new value is 160 + 120 = 280. Emma's total cost for the bicycle and servicing is 160 + 20 = 180. The profit from selling the bicycle is 280 - 180 = 100. The helmet purchase of $15 is an irrelevant distractor that does not affect the profit calculation. The proposed answer of 100 is correct."
+  }
+]

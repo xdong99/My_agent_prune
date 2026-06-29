@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Windows downloaded-file metadata.
+*Zone.Identifier
+
+# Local archived workspace from before the repo clone.
+previous_workspace_*/
+
+# Experiment launch logs and process ids.
+*.log
+*.pid
+outputs/run_logs/
+outputs/launcher_test*/
+
+# Keep the final compact PoC artifacts, ignore other exploratory outputs.
+outputs/*
+!outputs/surrogate_ig_training_150_soft_numeric_agents3_gpt35_combined/
+!outputs/surrogate_ig_training_150_soft_numeric_agents3_gpt35_combined/**
+!outputs/surrogate_ig_training_150_soft_numeric_agents3_gpt35_optimized_poc/
+outputs/surrogate_ig_training_150_soft_numeric_agents3_gpt35_optimized_poc/*
+!outputs/surrogate_ig_training_150_soft_numeric_agents3_gpt35_optimized_poc/run_20260602_213844/
+!outputs/surrogate_ig_training_150_soft_numeric_agents3_gpt35_optimized_poc/run_20260602_213844/**
+!outputs/task_validity_audit/
+!outputs/task_validity_audit/**
+
+# Re-ignore logs inside explicitly kept artifact directories.
+outputs/**/*.log
+outputs/**/*.pid
